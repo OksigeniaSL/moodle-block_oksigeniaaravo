@@ -5,6 +5,10 @@ All notable changes to this plugin are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+- The bars rise from zero on load and the card eases in (CSS only, guarded by `prefers-reduced-motion`); the figure
+  carries more weight and the bars a subtle depth and sheen that read the same in light and dark.
+
 ### Added
 - Plan usage: a section with active users (last 30 days) and disk, each against the client's limit, measured locally
   and compared to the limits the central sends per client (`client.limits`). Shown only when limits are set.

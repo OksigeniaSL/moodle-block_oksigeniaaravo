@@ -58,6 +58,7 @@ $string['fullregister'] = 'Registro completo';
 $string['updatedat'] = 'Actualizado a las {$a}';
 $string['nodatayet'] = 'Todavía no hay nada que mostrar.';
 $string['registertitle'] = 'Horas de soporte';
+$string['interventiontitle'] = 'Intervención del mes';
 $string['summarytitle'] = 'Por mes';
 $string['worktitle'] = 'Registro de trabajos';
 $string['downloadcsv'] = 'Descargar CSV';

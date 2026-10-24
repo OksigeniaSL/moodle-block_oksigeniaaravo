@@ -37,15 +37,14 @@ class presenter {
             'provider' => self::provider($snap),
             'updated' => self::updated($meta),
             'failed' => self::failed($meta),
-            'hasbag' => $snap->has_bag(),
             'registerurl' => (new \moodle_url('/blocks/oksigeniaaravo/index.php'))->out(false),
         ];
         if ($snap->has_bag()) {
             $context['bag'] = self::bag($snap->bag());
         }
-        $interventions = self::intervention_label($snap->interventions());
-        if ($interventions !== '') {
-            $context['interventions'] = $interventions;
+        $intervention = self::intervention($snap->interventions());
+        if ($intervention !== null) {
+            $context['interventions'] = $intervention;
         }
         $recent = [];
         foreach (array_slice($snap->entries(), 0, 3) as $entry) {
@@ -72,14 +71,13 @@ class presenter {
             'provider' => self::provider($snap),
             'updated' => self::updated($meta),
             'failed' => self::failed($meta),
-            'hasbag' => $snap->has_bag(),
         ];
         if ($snap->has_bag()) {
             $context['bag'] = self::bag($snap->bag());
         }
-        $interventions = self::intervention_label($snap->interventions());
-        if ($interventions !== '') {
-            $context['interventions'] = $interventions;
+        $intervention = self::intervention($snap->interventions());
+        if ($intervention !== null) {
+            $context['interventions'] = $intervention;
         }
         $summary = [];
         foreach ($snap->monthly_summary() as $row) {
@@ -211,13 +209,15 @@ class presenter {
     }
 
     /**
-     * The bag section: readable durations, the percentage left and whether it is low.
+     * The bag section: readable durations, the percentage left, and the colour by how much is left.
      *
      * @param array $bag The bag from the snapshot.
      * @return array
      */
     private static function bag(array $bag): array {
         $percent = $bag['purchased'] > 0 ? (int) round($bag['remaining'] / $bag['purchased'] * 100) : 0;
+        $low = $bag['threshold'] > 0 && $bag['remaining'] <= $bag['threshold'];
+        $warn = !$low && $bag['threshold'] > 0 && $bag['remaining'] <= $bag['threshold'] * 2;
         return [
             'remaining' => minutes::format($bag['remaining']),
             'summary' => get_string('bagusedof', 'block_oksigeniaaravo', [
@@ -225,12 +225,14 @@ class presenter {
                 'purchased' => minutes::format($bag['purchased']),
             ]),
             'percent' => max(0, min(100, $percent)),
-            'low' => $bag['threshold'] > 0 && $bag['remaining'] <= $bag['threshold'],
+            'low' => $low,
+            'numberclass' => $low ? 'text-danger' : '',
+            'barclass' => $low ? 'bg-danger' : ($warn ? 'bg-warning' : 'bg-success'),
         ];
     }
 
     /**
-     * One work row for the templates: the readable date, the duration and the kind of work.
+     * One work row for the templates: the readable date, the duration, the kind of work and its colour.
      *
      * @param array $entry The entry from the snapshot.
      * @return array
@@ -242,6 +244,7 @@ class presenter {
             'description' => $entry['description'],
             'minutes' => minutes::format($entry['minutes']),
             'type' => self::type_label($entry['type']),
+            'typetone' => self::type_tone($entry['type']),
         ];
     }
 
@@ -258,36 +261,57 @@ class presenter {
     }
 
     /**
-     * The line about this month's included intervention, or an empty string if the plan has none.
+     * A restrained text colour utility for a kind of work.
      *
-     * @param array $in This month's interventions from the snapshot.
+     * @param string $type The type code.
      * @return string
      */
-    private static function intervention_label(array $in): string {
+    private static function type_tone(string $type): string {
+        $tones = [
+            'included' => 'text-success',
+            'bag' => 'text-primary',
+            'out_of_bag' => 'text-warning',
+            'maintenance' => 'text-muted',
+        ];
+        return $tones[$type] ?? 'text-muted';
+    }
+
+    /**
+     * This month's included intervention as a chip (text and colour), or null if the plan has none.
+     *
+     * @param array $in This month's interventions from the snapshot.
+     * @return array|null
+     */
+    private static function intervention(array $in): ?array {
         if ($in['allowed'] <= 0) {
-            return '';
+            return null;
         }
         $month = self::month_name($in['month']);
+        $available = $in['used'] < $in['allowed'];
         if ($in['allowed'] === 1) {
             if ($in['used'] <= 0) {
-                return get_string('interventionavailable', 'block_oksigeniaaravo', $month);
+                $text = get_string('interventionavailable', 'block_oksigeniaaravo', $month);
+            } else {
+                $first = $in['items'][0] ?? null;
+                if ($first) {
+                    $ts = $first['date'] !== '' ? strtotime($first['date']) : 0;
+                    $text = get_string('interventionused', 'block_oksigeniaaravo', [
+                        'month' => $month,
+                        'date' => $ts ? userdate($ts, get_string('strftimedate', 'langconfig')) : $first['date'],
+                        'mins' => minutes::format($first['minutes']),
+                    ]);
+                } else {
+                    $text = get_string('interventionusedplain', 'block_oksigeniaaravo', $month);
+                }
             }
-            $first = $in['items'][0] ?? null;
-            if ($first) {
-                $ts = $first['date'] !== '' ? strtotime($first['date']) : 0;
-                return get_string('interventionused', 'block_oksigeniaaravo', [
-                    'month' => $month,
-                    'date' => $ts ? userdate($ts, get_string('strftimedate', 'langconfig')) : $first['date'],
-                    'mins' => minutes::format($first['minutes']),
-                ]);
-            }
-            return get_string('interventionusedplain', 'block_oksigeniaaravo', $month);
+        } else {
+            $text = get_string('interventionsused', 'block_oksigeniaaravo', [
+                'month' => $month,
+                'used' => $in['used'],
+                'allowed' => $in['allowed'],
+            ]);
         }
-        return get_string('interventionsused', 'block_oksigeniaaravo', [
-            'month' => $month,
-            'used' => $in['used'],
-            'allowed' => $in['allowed'],
-        ]);
+        return ['text' => $text, 'tone' => $available ? 'text-success' : 'text-muted'];
     }
 
     /**

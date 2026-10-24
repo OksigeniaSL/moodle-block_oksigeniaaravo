@@ -1,13 +1,77 @@
-.block-oksigeniaaravo .aravo-remaining {
-    font-size: 1.4em;
-    font-weight: bold;
+.block-oksigeniaaravo .aravo-label,
+.block-oksigeniaaravo-register .aravo-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+}
+
+.block-oksigeniaaravo .aravo-remaining,
+.block-oksigeniaaravo-register .aravo-remaining {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
 }
 
 .block-oksigeniaaravo .aravo-progress,
 .block-oksigeniaaravo-register .aravo-progress {
     height: 0.5rem;
+    border-radius: 999px;
+    overflow: hidden;
+    background-color: rgba(127, 127, 127, 0.2);
 }
 
-.block-oksigeniaaravo-register .aravo-progress {
-    max-width: 24rem;
+.block-oksigeniaaravo .aravo-progress .progress-bar,
+.block-oksigeniaaravo-register .aravo-progress .progress-bar {
+    border-radius: 999px;
+}
+
+.block-oksigeniaaravo .aravo-chip,
+.block-oksigeniaaravo-register .aravo-chip {
+    display: inline-block;
+    padding: 0.12rem 0.6rem;
+    border: 1px solid currentcolor;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.block-oksigeniaaravo .aravo-worklist {
+    margin-bottom: 0.75rem;
+}
+
+.block-oksigeniaaravo .aravo-work {
+    padding: 0.4rem 0;
+    border-top: 1px solid rgba(127, 127, 127, 0.18);
+}
+
+.block-oksigeniaaravo .aravo-work:first-child {
+    border-top: 0;
+}
+
+.block-oksigeniaaravo .aravo-work-main {
+    font-weight: 600;
+}
+
+.block-oksigeniaaravo .aravo-more {
+    font-weight: 600;
+}
+
+.block-oksigeniaaravo-register .aravo-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.block-oksigeniaaravo-register .aravo-card {
+    flex: 1 1 220px;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(127, 127, 127, 0.25);
+    border-radius: 0.75rem;
+}
+
+.block-oksigeniaaravo-register .aravo-num {
+    text-align: right;
 }

@@ -44,7 +44,7 @@
     <div class="aravo-cards mb-4">
         {{#bag}}
             <div class="aravo-card">
-                <div class="aravo-label text-muted">{{#str}} bagtitle, block_oksigeniaaravo {{/str}}</div>
+                <h3 class="aravo-label text-muted">{{#str}} bagtitle, block_oksigeniaaravo {{/str}}</h3>
                 <div class="aravo-remaining {{numberclass}}">{{remaining}}</div>
                 <div class="progress aravo-progress my-2" role="progressbar" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar {{barclass}}" style="width: {{percent}}%;"></div>
@@ -54,58 +54,62 @@
         {{/bag}}
         {{#interventions}}
             <div class="aravo-card">
-                <div class="aravo-label text-muted">{{#str}} interventiontitle, block_oksigeniaaravo {{/str}}</div>
+                <h3 class="aravo-label text-muted">{{#str}} interventiontitle, block_oksigeniaaravo {{/str}}</h3>
                 <div class="mt-1"><span class="aravo-chip {{tone}}">{{text}}</span></div>
             </div>
         {{/interventions}}
     </div>
     {{#hassummary}}
-        <div class="aravo-label text-muted">{{#str}} summarytitle, block_oksigeniaaravo {{/str}}</div>
-        <table class="table table-sm aravo-table mb-4">
-            <thead>
-                <tr>
-                    <th scope="col">{{#str}} colmonth, block_oksigeniaaravo {{/str}}</th>
-                    <th scope="col">{{#str}} colinterventions, block_oksigeniaaravo {{/str}}</th>
-                    <th scope="col" class="aravo-num">{{#str}} colbag, block_oksigeniaaravo {{/str}}</th>
-                    <th scope="col" class="aravo-num">{{#str}} coloutofbag, block_oksigeniaaravo {{/str}}</th>
-                    <th scope="col" class="aravo-num">{{#str}} colmaintenance, block_oksigeniaaravo {{/str}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#summary}}
-                    <tr><td>{{month}}</td><td>{{interventions}}</td><td class="aravo-num">{{bag}}</td><td class="aravo-num">{{outofbag}}</td><td class="aravo-num">{{maintenance}}</td></tr>
-                {{/summary}}
-            </tbody>
-        </table>
+        <h2 class="aravo-label text-muted">{{#str}} summarytitle, block_oksigeniaaravo {{/str}}</h2>
+        <div class="table-responsive mb-4">
+            <table class="table table-sm aravo-table mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">{{#str}} colmonth, block_oksigeniaaravo {{/str}}</th>
+                        <th scope="col">{{#str}} colinterventions, block_oksigeniaaravo {{/str}}</th>
+                        <th scope="col" class="aravo-num">{{#str}} colbag, block_oksigeniaaravo {{/str}}</th>
+                        <th scope="col" class="aravo-num">{{#str}} coloutofbag, block_oksigeniaaravo {{/str}}</th>
+                        <th scope="col" class="aravo-num">{{#str}} colmaintenance, block_oksigeniaaravo {{/str}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#summary}}
+                        <tr><td>{{month}}</td><td>{{interventions}}</td><td class="aravo-num">{{bag}}</td><td class="aravo-num">{{outofbag}}</td><td class="aravo-num">{{maintenance}}</td></tr>
+                    {{/summary}}
+                </tbody>
+            </table>
+        </div>
     {{/hassummary}}
     {{#hasentries}}
         <div class="aravo-worktop d-flex flex-wrap justify-content-between align-items-center mb-2">
-            <div class="aravo-label text-muted mb-0">{{#str}} worktitle, block_oksigeniaaravo {{/str}}</div>
+            <h2 class="aravo-label text-muted mb-0">{{#str}} worktitle, block_oksigeniaaravo {{/str}}</h2>
             <div class="aravo-downloads">
                 <a class="btn btn-outline-secondary btn-sm" href="{{downloadcsv}}">{{#str}} downloadcsv, block_oksigeniaaravo {{/str}}</a>
                 <a class="btn btn-outline-secondary btn-sm" href="{{downloadexcel}}">{{#str}} downloadexcel, block_oksigeniaaravo {{/str}}</a>
             </div>
         </div>
-        <table class="table aravo-table">
-            <thead>
-                <tr>
-                    <th scope="col">{{#str}} coldate, block_oksigeniaaravo {{/str}}</th>
-                    <th scope="col">{{#str}} coldescription, block_oksigeniaaravo {{/str}}</th>
-                    <th scope="col" class="aravo-num">{{#str}} colminutes, block_oksigeniaaravo {{/str}}</th>
-                    <th scope="col">{{#str}} coltype, block_oksigeniaaravo {{/str}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#entries}}
+        <div class="table-responsive">
+            <table class="table aravo-table mb-0">
+                <thead>
                     <tr>
-                        <td class="text-nowrap">{{date}}</td>
-                        <td>{{description}}</td>
-                        <td class="aravo-num">{{minutes}}</td>
-                        <td><span class="{{typetone}}">{{type}}</span></td>
+                        <th scope="col">{{#str}} coldate, block_oksigeniaaravo {{/str}}</th>
+                        <th scope="col">{{#str}} coldescription, block_oksigeniaaravo {{/str}}</th>
+                        <th scope="col" class="aravo-num">{{#str}} colminutes, block_oksigeniaaravo {{/str}}</th>
+                        <th scope="col">{{#str}} coltype, block_oksigeniaaravo {{/str}}</th>
                     </tr>
-                {{/entries}}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {{#entries}}
+                        <tr>
+                            <td class="text-nowrap">{{date}}</td>
+                            <td>{{description}}</td>
+                            <td class="aravo-num">{{minutes}}</td>
+                            <td><span class="{{typetone}}">{{type}}</span></td>
+                        </tr>
+                    {{/entries}}
+                </tbody>
+            </table>
+        </div>
     {{/hasentries}}
     {{#centraladminurl}}
         <p><a href="{{centraladminurl}}">{{#str}} centraladmin, block_oksigeniaaravo {{/str}}</a></p>

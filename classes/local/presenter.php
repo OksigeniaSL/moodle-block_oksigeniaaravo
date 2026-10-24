@@ -267,10 +267,12 @@ class presenter {
      * @return string
      */
     private static function type_tone(string $type): string {
+        // Plain colour utilities that keep enough contrast in light and dark; the label text already names the type,
+        // so colour is only a hint (amber text fails contrast, so "out of bag" uses danger instead).
         $tones = [
             'included' => 'text-success',
             'bag' => 'text-primary',
-            'out_of_bag' => 'text-warning',
+            'out_of_bag' => 'text-danger',
             'maintenance' => 'text-muted',
         ];
         return $tones[$type] ?? 'text-muted';

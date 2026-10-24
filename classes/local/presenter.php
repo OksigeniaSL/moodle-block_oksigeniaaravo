@@ -110,10 +110,14 @@ class presenter {
         if ($entries) {
             $context['entries'] = $entries;
         }
-        $context['downloadcsv'] = (new \moodle_url('/blocks/oksigeniaaravo/index.php',
-            ['dataformat' => 'csv', 'sesskey' => sesskey()]))->out(false);
-        $context['downloadexcel'] = (new \moodle_url('/blocks/oksigeniaaravo/index.php',
-            ['dataformat' => 'excel', 'sesskey' => sesskey()]))->out(false);
+        $context['downloadcsv'] = (new \moodle_url(
+            '/blocks/oksigeniaaravo/index.php',
+            ['dataformat' => 'csv', 'sesskey' => sesskey()]
+        ))->out(false);
+        $context['downloadexcel'] = (new \moodle_url(
+            '/blocks/oksigeniaaravo/index.php',
+            ['dataformat' => 'excel', 'sesskey' => sesskey()]
+        ))->out(false);
         $adminurl = $snap->central_admin_url();
         if ($showadminlink && $adminurl !== '') {
             $context['centraladminurl'] = $adminurl;
@@ -189,8 +193,11 @@ class presenter {
         if ($fetchedat <= 0) {
             return '';
         }
-        return get_string('updatedat', 'block_oksigeniaaravo',
-            userdate($fetchedat, get_string('strftimedatetimeshort', 'langconfig')));
+        return get_string(
+            'updatedat',
+            'block_oksigeniaaravo',
+            userdate($fetchedat, get_string('strftimedatetimeshort', 'langconfig'))
+        );
     }
 
     /**

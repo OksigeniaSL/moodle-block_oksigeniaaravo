@@ -36,8 +36,13 @@ class central {
      * @param string|null $to End of the window as YYYY-MM-DD, or null for the default.
      * @return array
      */
-    public static function fetch(string $endpoint, string $token, string $siteurl, ?string $from = null,
-            ?string $to = null): array {
+    public static function fetch(
+        string $endpoint,
+        string $token,
+        string $siteurl,
+        ?string $from = null,
+        ?string $to = null
+    ): array {
         if (strpos($endpoint, 'https://') !== 0) {
             return ['httpstatus' => 0, 'body' => null, 'error' => 'badurl'];
         }

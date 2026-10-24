@@ -74,8 +74,10 @@ class block_oksigeniaaravo extends block_base {
         }
         $snap = snapshot::from_store();
         if (!$snap) {
-            $this->content->text = $OUTPUT->render_from_template('block_oksigeniaaravo/content',
-                ['empty' => true, 'message' => get_string('nodatayet', 'block_oksigeniaaravo')]);
+            $this->content->text = $OUTPUT->render_from_template(
+                'block_oksigeniaaravo/content',
+                ['empty' => true, 'message' => get_string('nodatayet', 'block_oksigeniaaravo')]
+            );
             return $this->content;
         }
         $context = presenter::card($snap, store::get());

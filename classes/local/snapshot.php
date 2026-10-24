@@ -29,6 +29,8 @@ class snapshot {
     private $data;
 
     /**
+     * Wraps a decoded snapshot.
+     *
      * @param array $data The decoded snapshot JSON.
      */
     public function __construct(array $data) {

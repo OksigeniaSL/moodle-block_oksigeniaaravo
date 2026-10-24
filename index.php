@@ -45,7 +45,7 @@ if ($dataformat !== '') {
         $dataformat,
         $columns,
         new ArrayIterator($rows),
-        function($row) use ($keys) {
+        function ($row) use ($keys) {
             $out = [];
             foreach ($keys as $key) {
                 $out[] = $row[$key] ?? '';

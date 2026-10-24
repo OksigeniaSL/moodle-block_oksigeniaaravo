@@ -61,6 +61,9 @@ class central {
         if ($token !== '') {
             $headers[] = 'Authorization: Bearer ' . $token;
         }
+        global $CFG;
+        // The curl class lives in filelib.php, which a scheduled task does not load on its own.
+        require_once($CFG->libdir . '/filelib.php');
         $curl = new \curl();
         $curl->setHeader($headers);
         $options = [

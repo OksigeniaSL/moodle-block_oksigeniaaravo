@@ -40,7 +40,17 @@ class refresher {
             store::save('noendpoint', 0, null, 0);
             return store::get();
         }
-        $result = central::fetch($endpoint, $token, $CFG->wwwroot, $from, $to);
+        return self::store_result(central::fetch($endpoint, $token, $CFG->wwwroot, $from, $to));
+    }
+
+    /**
+     * Keeps the local copy from a read result (as central::fetch returns it). On any failure it leaves the previous
+     * copy in place and only notes that the read failed. Separate from the network call so it can be tested.
+     *
+     * @param array $result The read result: "httpstatus" (int), "body" (string|null), "error" (string|null).
+     * @return \stdClass|null The cache row after the read.
+     */
+    public static function store_result(array $result): ?\stdClass {
         if ($result['error'] !== null) {
             store::save($result['error'], $result['httpstatus'], null, 0);
             return store::get();

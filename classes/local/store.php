@@ -73,4 +73,23 @@ class store {
             $DB->update_record(self::TABLE, $record);
         }
     }
+
+    /**
+     * Records the locally measured plan usage on the single row. Does nothing if there is no row yet.
+     *
+     * @param int $activeusers Users active in the last 30 days.
+     * @param int $diskmb Disk used by the files, in whole megabytes.
+     * @return void
+     */
+    public static function save_usage(int $activeusers, int $diskmb): void {
+        global $DB;
+        $row = self::get();
+        if (!$row) {
+            return;
+        }
+        $row->activeusers = $activeusers;
+        $row->diskmb = $diskmb;
+        $row->usageat = time();
+        $DB->update_record(self::TABLE, $row);
+    }
 }

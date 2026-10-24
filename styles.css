@@ -103,6 +103,11 @@
     text-align: right;
 }
 
+.block-oksigeniaaravo .aravo-usagerow,
+.block-oksigeniaaravo-register .aravo-usagerow {
+    margin-bottom: 0.5rem;
+}
+
 @media (max-width: 575.98px) {
     .block-oksigeniaaravo-register .aravo-table thead {
         display: none;

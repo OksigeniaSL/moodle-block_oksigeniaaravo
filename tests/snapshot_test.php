@@ -44,7 +44,8 @@ final class snapshot_test extends \advanced_testcase {
         return [
             'schema' => 'aravo.snapshot.v1',
             'generated_at' => '2026-11-04T09:12:00+00:00',
-            'client' => ['provider' => 'Oksigenia support', 'plan' => 'aula'],
+            'client' => ['provider' => 'Oksigenia support', 'plan' => 'aula',
+                'limits' => ['active_users' => 200, 'disk_gb' => 15]],
             'bag' => [
                 'has_bag' => true,
                 'balance_minutes' => 225,
@@ -120,6 +121,20 @@ final class snapshot_test extends \advanced_testcase {
         $this->assertFalse($context['bag']['low']);
         $this->assertNotEmpty($context['interventionline']);
         $this->assertFalse($context['failed']);
+    }
+
+    public function test_the_card_shows_plan_usage_only_when_measured(): void {
+        $snap = new snapshot($this->example());
+        // No usage measured yet: no section.
+        $plain = presenter::card($snap, (object) ['status' => 'ok', 'fetchedat' => time()]);
+        $this->assertArrayNotHasKey('usage', $plain);
+        // Measured: two bars (users and disk), users at 120 of 200 = 60%.
+        $meta = (object) ['status' => 'ok', 'fetchedat' => time(), 'usageat' => time(),
+            'activeusers' => 120, 'diskmb' => 3277];
+        $context = presenter::card($snap, $meta);
+        $this->assertArrayHasKey('usage', $context);
+        $this->assertCount(2, $context['usage']['rows']);
+        $this->assertEquals(60, $context['usage']['rows'][0]['percent']);
     }
 
     public function test_a_failed_read_is_flagged_when_there_is_a_previous_copy(): void {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/oksigeniaaravo/db" VERSION="2026102400" COMMENT="Local cache for block_oksigeniaaravo."
+<XMLDB PATH="blocks/oksigeniaaravo/db" VERSION="2026102401" COMMENT="Local cache for block_oksigeniaaravo."
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -13,6 +13,9 @@
         <FIELD NAME="attemptedat" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="When Aravo last tried to read, with success or not, as a Unix time."/>
         <FIELD NAME="status" TYPE="char" LENGTH="32" NOTNULL="false" SEQUENCE="false" COMMENT="Result of the last read: ok, or a short error code."/>
         <FIELD NAME="httpstatus" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="HTTP status of the last read, or 0 if it did not get one."/>
+        <FIELD NAME="activeusers" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Users active in the last 30 days, measured locally for the plan usage."/>
+        <FIELD NAME="diskmb" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Disk used by the files in whole megabytes, measured locally."/>
+        <FIELD NAME="usageat" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="When the plan usage was last measured, as a Unix time (0 if never)."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

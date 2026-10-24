@@ -33,6 +33,7 @@
             "statusword": "Low balance"
         },
         "interventionline": "Interventions for November 2026: 1 of 2",
+        "usage": {"rows": [{"label": "Active users (30 days)", "text": "120 of 200", "percent": 60, "barclass": ""}]},
         "hasrecent": true,
         "recent": [
             {"date": "4 November 2026", "description": "Added 12 users", "minutes": "30 min", "type": "From the bag", "typedot": "text-primary"}
@@ -64,6 +65,19 @@
         {{#interventionline}}
             <p class="aravo-intervention mb-3">{{.}}</p>
         {{/interventionline}}
+        {{#usage}}
+            <div class="aravo-usage mb-3">
+                <div class="aravo-label text-muted">{{#str}} usagetitle, block_oksigeniaaravo {{/str}}</div>
+                {{#rows}}
+                    <div class="aravo-usagerow">
+                        <div class="small d-flex justify-content-between"><span>{{label}}</span><span class="text-muted">{{text}}</span></div>
+                        <div class="progress aravo-progress" role="progressbar" aria-label="{{label}}" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100" aria-valuetext="{{text}}">
+                            <div class="progress-bar {{barclass}}" style="width: {{percent}}%;"></div>
+                        </div>
+                    </div>
+                {{/rows}}
+            </div>
+        {{/usage}}
         {{#hasrecent}}
             <div class="aravo-label text-muted">{{#str}} recenttitle, block_oksigeniaaravo {{/str}}</div>
             <ul class="aravo-worklist list-unstyled mb-3">

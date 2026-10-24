@@ -68,6 +68,13 @@ $string['summarytitle'] = 'By month';
 $string['worktitle'] = 'Work log';
 $string['centraladmin'] = 'Open in the central registry (administrators)';
 
+// Plan usage.
+$string['usagetitle'] = 'Plan usage';
+$string['usageusers'] = 'Active users (30 days)';
+$string['usageusersof'] = '{$a->used} of {$a->limit}';
+$string['usagedisk'] = 'Disk';
+$string['usagediskof'] = '{$a->used} GB of {$a->limit} GB';
+
 // This month's included interventions.
 $string['interventionstitle'] = 'Included interventions';
 $string['interventionline'] = 'Interventions for {$a->month}: {$a->used} of {$a->allowed}';

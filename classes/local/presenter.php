@@ -46,6 +46,10 @@ class presenter {
         if ($intervention !== null) {
             $context['interventionline'] = $intervention['line'];
         }
+        $usage = self::usage($snap->limits(), $meta);
+        if ($usage !== null) {
+            $context['usage'] = $usage;
+        }
         $recent = [];
         foreach (array_slice($snap->entries(), 0, 3) as $entry) {
             $recent[] = self::entry_row($entry);
@@ -78,6 +82,10 @@ class presenter {
         $intervention = self::intervention($snap->interventions());
         if ($intervention !== null) {
             $context['intervention'] = $intervention;
+        }
+        $usage = self::usage($snap->limits(), $meta);
+        if ($usage !== null) {
+            $context['usage'] = $usage;
         }
         $summary = [];
         foreach ($snap->monthly_summary() as $row) {
@@ -229,6 +237,64 @@ class presenter {
             'numberclass' => $state === 'empty' ? 'text-danger' : '',
             'barclass' => $state === 'empty' ? 'bg-danger' : ($state === 'low' ? 'bg-warning' : ''),
             'statusword' => isset($words[$state]) ? get_string($words[$state], 'block_oksigeniaaravo') : '',
+        ];
+    }
+
+    /**
+     * The plan usage section: a bar for active users and one for disk, each against its limit, coloured by how close
+     * it is. Null when there are no limits or the usage has not been measured yet.
+     *
+     * @param array|null $limits The plan limits from the snapshot.
+     * @param \stdClass $meta The local copy's metadata, with the measured usage.
+     * @return array|null
+     */
+    private static function usage(?array $limits, \stdClass $meta): ?array {
+        if ($limits === null || (int) ($meta->usageat ?? 0) <= 0) {
+            return null;
+        }
+        $rows = [];
+        if ($limits['active_users'] > 0) {
+            $used = (int) ($meta->activeusers ?? 0);
+            $rows[] = self::usage_row(
+                get_string('usageusers', 'block_oksigeniaaravo'),
+                get_string('usageusersof', 'block_oksigeniaaravo', ['used' => $used, 'limit' => $limits['active_users']]),
+                $used,
+                $limits['active_users']
+            );
+        }
+        if ($limits['disk_gb'] > 0) {
+            $usedgb = (int) ($meta->diskmb ?? 0) / 1024;
+            $rows[] = self::usage_row(
+                get_string('usagedisk', 'block_oksigeniaaravo'),
+                get_string('usagediskof', 'block_oksigeniaaravo', [
+                    'used' => format_float($usedgb, 1),
+                    'limit' => format_float($limits['disk_gb'], 0),
+                ]),
+                $usedgb,
+                $limits['disk_gb']
+            );
+        }
+        return $rows ? ['rows' => $rows] : null;
+    }
+
+    /**
+     * One usage bar: its label, the "used of limit" text, the percentage and the colour by how close it is.
+     *
+     * @param string $label The row label.
+     * @param string $text The "used of limit" text.
+     * @param float $used What is used.
+     * @param float $limit The limit.
+     * @return array
+     */
+    private static function usage_row(string $label, string $text, float $used, float $limit): array {
+        $percent = $limit > 0 ? (int) round($used / $limit * 100) : 0;
+        $over = $used >= $limit;
+        $warn = !$over && $percent >= 80;
+        return [
+            'label' => $label,
+            'text' => $text,
+            'percent' => max(0, min(100, $percent)),
+            'barclass' => $over ? 'bg-danger' : ($warn ? 'bg-warning' : ''),
         ];
     }
 

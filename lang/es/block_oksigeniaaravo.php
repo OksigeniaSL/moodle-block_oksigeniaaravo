@@ -68,6 +68,13 @@ $string['summarytitle'] = 'Por mes';
 $string['worktitle'] = 'Registro de trabajos';
 $string['centraladmin'] = 'Abrir en el registro central (administradores)';
 
+// Uso del plan.
+$string['usagetitle'] = 'Uso del plan';
+$string['usageusers'] = 'Usuarios activos (30 días)';
+$string['usageusersof'] = '{$a->used} de {$a->limit}';
+$string['usagedisk'] = 'Disco';
+$string['usagediskof'] = '{$a->used} GB de {$a->limit} GB';
+
 // Las intervenciones incluidas del mes.
 $string['interventionstitle'] = 'Intervenciones incluidas';
 $string['interventionline'] = 'Intervenciones de {$a->month}: {$a->used} de {$a->allowed}';

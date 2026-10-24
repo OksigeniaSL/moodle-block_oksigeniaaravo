@@ -25,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_oksigeniaaravo';
-$plugin->version   = 2026102400;
-$plugin->release   = '0.1.0';
+$plugin->version   = 2026102401;
+$plugin->release   = '0.2.0';
 $plugin->maturity  = MATURITY_ALPHA;
 $plugin->requires  = 2022112800; // Moodle 4.1, the oldest branch Aravo supports.
 $plugin->supported = [401, 503];

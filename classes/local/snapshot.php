@@ -200,6 +200,25 @@ class snapshot {
     }
 
     /**
+     * The plan limits for this client (active users and disk in GB), or null if the central did not send them.
+     *
+     * @return array|null
+     */
+    public function limits(): ?array {
+        $limits = isset($this->data['client']['limits']) && is_array($this->data['client']['limits'])
+            ? $this->data['client']['limits'] : null;
+        if ($limits === null) {
+            return null;
+        }
+        $users = (int) ($limits['active_users'] ?? 0);
+        $disk = (float) ($limits['disk_gb'] ?? 0);
+        if ($users <= 0 && $disk <= 0) {
+            return null;
+        }
+        return ['active_users' => $users, 'disk_gb' => $disk];
+    }
+
+    /**
      * The central admin link for site administrators, or an empty string.
      *
      * @return string

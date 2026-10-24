@@ -16,7 +16,10 @@
 
 namespace block_oksigeniaaravo\task;
 
+use block_oksigeniaaravo\local\planusage;
 use block_oksigeniaaravo\local\refresher;
+use block_oksigeniaaravo\local\snapshot;
+use block_oksigeniaaravo\local\store;
 
 /**
  * Brings a fresh snapshot from the central registry into the local copy.
@@ -44,5 +47,26 @@ class refresh extends \core\task\scheduled_task {
         $snap = refresher::refresh();
         $status = $snap && isset($snap->status) ? $snap->status : 'unknown';
         mtrace('block_oksigeniaaravo: central read finished with status ' . $status . '.');
+        $this->measure_usage();
+    }
+
+    /**
+     * Measures the plan usage when the client has limits to compare against, at most once every few hours (the disk
+     * scan is heavy). The usage itself comes from this Moodle, not the central.
+     *
+     * @return void
+     */
+    private function measure_usage(): void {
+        $current = snapshot::from_store();
+        if (!$current || $current->limits() === null) {
+            return;
+        }
+        $row = store::get();
+        $stale = !$row || (int) $row->usageat === 0 || (time() - (int) $row->usageat) > 6 * HOURSECS;
+        if (!$stale) {
+            return;
+        }
+        store::save_usage(planusage::active_users(), planusage::disk_mb());
+        mtrace('block_oksigeniaaravo: plan usage measured.');
     }
 }

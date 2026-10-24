@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/oksigeniaaravo/db" VERSION="2026102400" COMMENT="Local cache for block_oksigeniaaravo."
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_oksigeniaaravo_snap" COMMENT="The last snapshot read from the central registry, so the block works when the central does not answer. One row per site.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="payload" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The snapshot JSON as the central sent it, or null if never read with success."/>
+        <FIELD NAME="generatedat" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="When the central generated the snapshot (its generated_at), as a Unix time."/>
+        <FIELD NAME="fetchedat" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="When Aravo last read with success, as a Unix time."/>
+        <FIELD NAME="attemptedat" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="When Aravo last tried to read, with success or not, as a Unix time."/>
+        <FIELD NAME="status" TYPE="char" LENGTH="32" NOTNULL="false" SEQUENCE="false" COMMENT="Result of the last read: ok, or a short error code."/>
+        <FIELD NAME="httpstatus" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="HTTP status of the last read, or 0 if it did not get one."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

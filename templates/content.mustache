@@ -1,0 +1,75 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_oksigeniaaravo/content
+
+    The card of the block: the bag, this month's included intervention and the last three works, read from the central.
+
+    Example context (json):
+    {
+        "provider": "Oksigenia support",
+        "updated": "Updated at 4 Nov, 09:12",
+        "failed": false,
+        "bag": {
+            "remaining": "3 h 45 min",
+            "summary": "6 h 15 min used of 10 h",
+            "percent": 37,
+            "low": false
+        },
+        "interventions": "Included intervention (November 2026): available",
+        "hasrecent": true,
+        "recent": [
+            {"date": "4 November 2026", "description": "Added 12 users", "minutes": "30 min", "type": "Included intervention"}
+        ],
+        "registerurl": "https://example.com/blocks/oksigeniaaravo/index.php"
+    }
+}}
+<div class="block-oksigeniaaravo">
+    {{#empty}}
+        <p class="text-muted mb-0">{{message}}</p>
+    {{/empty}}
+    {{^empty}}
+        {{#failed}}
+            <p class="small text-muted mb-2">{{#str}} couldnotupdate, block_oksigeniaaravo {{/str}}</p>
+        {{/failed}}
+        {{#bag}}
+            <div class="aravo-bag mb-2">
+                <p class="mb-1"><strong>{{#str}} bagtitle, block_oksigeniaaravo {{/str}}</strong></p>
+                <p class="aravo-remaining mb-1 {{#low}}text-danger{{/low}}">{{remaining}}</p>
+                <div class="progress aravo-progress" role="progressbar" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: {{percent}}%;"></div>
+                </div>
+                <p class="small text-muted mb-0">{{summary}}</p>
+            </div>
+        {{/bag}}
+        {{#interventions}}
+            <p class="aravo-intervention mb-2">{{.}}</p>
+        {{/interventions}}
+        {{#hasrecent}}
+            <p class="mb-1"><strong>{{#str}} recenttitle, block_oksigeniaaravo {{/str}}</strong></p>
+            <ul class="list-unstyled mb-2">
+                {{#recent}}
+                    <li class="mb-1"><span class="text-muted">{{date}}</span> · {{description}} <span class="text-muted">({{minutes}} · {{type}})</span></li>
+                {{/recent}}
+            </ul>
+        {{/hasrecent}}
+        <a href="{{registerurl}}">{{#str}} fullregister, block_oksigeniaaravo {{/str}}</a>
+        {{#updated}}
+            <p class="small text-muted mt-2 mb-0">{{updated}}</p>
+        {{/updated}}
+    {{/empty}}
+</div>

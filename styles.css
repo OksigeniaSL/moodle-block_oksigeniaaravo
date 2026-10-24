@@ -1,0 +1,13 @@
+.block-oksigeniaaravo .aravo-remaining {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.block-oksigeniaaravo .aravo-progress,
+.block-oksigeniaaravo-register .aravo-progress {
+    height: 0.5rem;
+}
+
+.block-oksigeniaaravo-register .aravo-progress {
+    max-width: 24rem;
+}

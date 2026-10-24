@@ -319,6 +319,6 @@ class presenter {
             return $month;
         }
         $ts = make_timestamp((int) $parts[1], (int) $parts[2], 1);
-        return userdate($ts, get_string('strftimemonthyear', 'langconfig'));
+        return userdate($ts, get_string('monthyearformat', 'block_oksigeniaaravo'));
     }
 }

@@ -44,6 +44,9 @@ $string['pagettl_desc'] = 'When the register page is opened and the local copy i
 // Scheduled task.
 $string['task_refresh'] = 'Read the support hours from the central registry';
 
+// A month and year, as a date format for userdate (%B is the month name).
+$string['monthyearformat'] = '%B %Y';
+
 // Durations.
 $string['durationhm'] = '{$a->h} h {$a->m} min';
 $string['durationh'] = '{$a->h} h';

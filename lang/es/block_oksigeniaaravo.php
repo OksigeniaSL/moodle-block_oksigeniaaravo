@@ -44,6 +44,9 @@ $string['pagettl_desc'] = 'Al abrir el registro, si la copia local es más antig
 // Tarea programada.
 $string['task_refresh'] = 'Leer las horas de soporte del registro central';
 
+// Un mes y un año, como formato de fecha para userdate (%B es el nombre del mes).
+$string['monthyearformat'] = '%B de %Y';
+
 // Duraciones.
 $string['durationhm'] = '{$a->h} h {$a->m} min';
 $string['durationh'] = '{$a->h} h';

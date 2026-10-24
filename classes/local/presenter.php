@@ -34,7 +34,7 @@ class presenter {
      */
     public static function card(snapshot $snap, \stdClass $meta): array {
         $context = [
-            'provider' => self::provider($snap),
+            'brand' => self::brand($snap),
             'updated' => self::updated($meta),
             'failed' => self::failed($meta),
             'registerurl' => (new \moodle_url('/blocks/oksigeniaaravo/index.php'))->out(false),
@@ -44,7 +44,7 @@ class presenter {
         }
         $intervention = self::intervention($snap->interventions());
         if ($intervention !== null) {
-            $context['interventions'] = $intervention;
+            $context['interventionline'] = $intervention['line'];
         }
         $recent = [];
         foreach (array_slice($snap->entries(), 0, 3) as $entry) {
@@ -59,7 +59,7 @@ class presenter {
 
     /**
      * The template context for the register page: the bag, this month's intervention, the per-month summary and the
-     * full list of works.
+     * full list of works. The download selector is added by the page, which has the output renderer.
      *
      * @param snapshot $snap The snapshot to show.
      * @param \stdClass $meta The local copy's metadata.
@@ -68,7 +68,7 @@ class presenter {
      */
     public static function page(snapshot $snap, \stdClass $meta, bool $showadminlink): array {
         $context = [
-            'provider' => self::provider($snap),
+            'brand' => self::brand($snap),
             'updated' => self::updated($meta),
             'failed' => self::failed($meta),
         ];
@@ -77,7 +77,7 @@ class presenter {
         }
         $intervention = self::intervention($snap->interventions());
         if ($intervention !== null) {
-            $context['interventions'] = $intervention;
+            $context['intervention'] = $intervention;
         }
         $summary = [];
         foreach ($snap->monthly_summary() as $row) {
@@ -97,25 +97,12 @@ class presenter {
         }
         $entries = [];
         foreach ($snap->entries() as $entry) {
-            $entries[] = self::entry_row($entry) + [
-                'included' => minutes::format($entry['included']),
-                'bagminutes' => minutes::format($entry['bag']),
-                'outofbag' => minutes::format($entry['outofbag']),
-                'reference' => $entry['reference'],
-            ];
+            $entries[] = self::entry_row($entry);
         }
         $context['hasentries'] = !empty($entries);
         if ($entries) {
             $context['entries'] = $entries;
         }
-        $context['downloadcsv'] = (new \moodle_url(
-            '/blocks/oksigeniaaravo/index.php',
-            ['dataformat' => 'csv', 'sesskey' => sesskey()]
-        ))->out(false);
-        $context['downloadexcel'] = (new \moodle_url(
-            '/blocks/oksigeniaaravo/index.php',
-            ['dataformat' => 'excel', 'sesskey' => sesskey()]
-        ))->out(false);
         $adminurl = $snap->central_admin_url();
         if ($showadminlink && $adminurl !== '') {
             $context['centraladminurl'] = $adminurl;
@@ -166,22 +153,21 @@ class presenter {
     }
 
     /**
-     * The provider name for the title: from the snapshot, then the setting, then the plugin name.
+     * The brand to show small at the foot: from the snapshot, then the setting, else an empty string.
      *
      * @param snapshot $snap The snapshot.
      * @return string
      */
-    private static function provider(snapshot $snap): string {
+    private static function brand(snapshot $snap): string {
         $name = $snap->provider();
-        if ($name !== '') {
-            return $name;
+        if ($name === '') {
+            $name = trim((string) get_config('block_oksigeniaaravo', 'provider'));
         }
-        $setting = trim((string) get_config('block_oksigeniaaravo', 'provider'));
-        return $setting !== '' ? $setting : get_string('pluginname', 'block_oksigeniaaravo');
+        return $name;
     }
 
     /**
-     * The "Updated at…" line, or an empty string if nothing has ever been read.
+     * The "Updated on … at …" line, or an empty string if nothing has ever been read.
      *
      * @param \stdClass $meta The local copy's metadata.
      * @return string
@@ -191,11 +177,10 @@ class presenter {
         if ($fetchedat <= 0) {
             return '';
         }
-        return get_string(
-            'updatedat',
-            'block_oksigeniaaravo',
-            userdate($fetchedat, get_string('strftimedatetimeshort', 'langconfig'))
-        );
+        return get_string('updatedat', 'block_oksigeniaaravo', [
+            'date' => userdate($fetchedat, get_string('strftimedate', 'langconfig')),
+            'time' => userdate($fetchedat, get_string('strftimetime', 'langconfig')),
+        ]);
     }
 
     /**
@@ -209,30 +194,46 @@ class presenter {
     }
 
     /**
-     * The bag section: readable durations, the percentage left, and the colour by how much is left.
+     * The bag section: the figure and the bar both show what is left, a caption that says the same, and the colour and
+     * a word for the state (never colour alone).
      *
      * @param array $bag The bag from the snapshot.
      * @return array
      */
     private static function bag(array $bag): array {
-        $percent = $bag['purchased'] > 0 ? (int) round($bag['remaining'] / $bag['purchased'] * 100) : 0;
-        $low = $bag['threshold'] > 0 && $bag['remaining'] <= $bag['threshold'];
-        $warn = !$low && $bag['threshold'] > 0 && $bag['remaining'] <= $bag['threshold'] * 2;
+        $remaining = $bag['remaining'];
+        $purchased = $bag['purchased'];
+        $percent = $purchased > 0 ? (int) round($remaining / $purchased * 100) : 0;
+        $percent = max(0, min(100, $percent));
+        if ($remaining <= 0) {
+            $state = 'empty';
+        } else if (
+            ($bag['threshold'] > 0 && $remaining <= $bag['threshold'])
+                || ($bag['threshold'] <= 0 && $percent < 20)
+        ) {
+            $state = 'low';
+        } else {
+            $state = 'ok';
+        }
+        $line = get_string('bagline', 'block_oksigeniaaravo', [
+            'remaining' => minutes::format($remaining),
+            'purchased' => minutes::format($purchased),
+            'used' => minutes::format($bag['used']),
+        ]);
+        $words = ['empty' => 'bagstatusempty', 'low' => 'bagstatuslow'];
         return [
-            'remaining' => minutes::format($bag['remaining']),
-            'summary' => get_string('bagusedof', 'block_oksigeniaaravo', [
-                'used' => minutes::format($bag['used']),
-                'purchased' => minutes::format($bag['purchased']),
-            ]),
-            'percent' => max(0, min(100, $percent)),
-            'low' => $low,
-            'numberclass' => $low ? 'text-danger' : '',
-            'barclass' => $low ? 'bg-danger' : ($warn ? 'bg-warning' : 'bg-success'),
+            'remaining' => minutes::format($remaining),
+            'line' => $line,
+            'percent' => $percent,
+            'low' => $state !== 'ok',
+            'numberclass' => $state === 'empty' ? 'text-danger' : '',
+            'barclass' => $state === 'empty' ? 'bg-danger' : ($state === 'low' ? 'bg-warning' : ''),
+            'statusword' => isset($words[$state]) ? get_string($words[$state], 'block_oksigeniaaravo') : '',
         ];
     }
 
     /**
-     * One work row for the templates: the readable date, the duration, the kind of work and its colour.
+     * One work row for the templates: the readable date, the duration, the kind of work and a coloured dot for it.
      *
      * @param array $entry The entry from the snapshot.
      * @return array
@@ -244,7 +245,7 @@ class presenter {
             'description' => $entry['description'],
             'minutes' => minutes::format($entry['minutes']),
             'type' => self::type_label($entry['type']),
-            'typetone' => self::type_tone($entry['type']),
+            'typedot' => self::type_dot($entry['type']),
         ];
     }
 
@@ -261,25 +262,25 @@ class presenter {
     }
 
     /**
-     * A restrained text colour utility for a kind of work.
+     * A text colour utility for the dot next to a kind of work. The utilities exist from Moodle 4.1 to 5.3; the label
+     * text carries the meaning, the dot is only a hint.
      *
      * @param string $type The type code.
      * @return string
      */
-    private static function type_tone(string $type): string {
-        // Plain colour utilities that keep enough contrast in light and dark; the label text already names the type,
-        // so colour is only a hint (amber text fails contrast, so "out of bag" uses danger instead).
-        $tones = [
+    private static function type_dot(string $type): string {
+        $dots = [
             'included' => 'text-success',
             'bag' => 'text-primary',
             'out_of_bag' => 'text-danger',
-            'maintenance' => 'text-muted',
+            'maintenance' => 'text-secondary',
         ];
-        return $tones[$type] ?? 'text-muted';
+        return $dots[$type] ?? 'text-secondary';
     }
 
     /**
-     * This month's included intervention as a chip (text and colour), or null if the plan has none.
+     * This month's included interventions: a one-line summary for the card, and a count with segments for the page.
+     * Null when the plan has none.
      *
      * @param array $in This month's interventions from the snapshot.
      * @return array|null
@@ -289,31 +290,22 @@ class presenter {
             return null;
         }
         $month = self::month_name($in['month']);
-        $available = $in['used'] < $in['allowed'];
-        if ($in['allowed'] === 1) {
-            if ($in['used'] <= 0) {
-                $text = get_string('interventionavailable', 'block_oksigeniaaravo', $month);
-            } else {
-                $first = $in['items'][0] ?? null;
-                if ($first) {
-                    $ts = $first['date'] !== '' ? strtotime($first['date']) : 0;
-                    $text = get_string('interventionused', 'block_oksigeniaaravo', [
-                        'month' => $month,
-                        'date' => $ts ? userdate($ts, get_string('strftimedate', 'langconfig')) : $first['date'],
-                        'mins' => minutes::format($first['minutes']),
-                    ]);
-                } else {
-                    $text = get_string('interventionusedplain', 'block_oksigeniaaravo', $month);
-                }
-            }
-        } else {
-            $text = get_string('interventionsused', 'block_oksigeniaaravo', [
+        $used = max(0, min($in['used'], $in['allowed']));
+        $segments = [];
+        for ($i = 0; $i < $in['allowed']; $i++) {
+            $segments[] = ['filled' => $i < $used];
+        }
+        return [
+            'line' => get_string('interventionline', 'block_oksigeniaaravo', [
                 'month' => $month,
                 'used' => $in['used'],
                 'allowed' => $in['allowed'],
-            ]);
-        }
-        return ['text' => $text, 'tone' => $available ? 'text-success' : 'text-muted'];
+            ]),
+            'label' => get_string('interventionstitle', 'block_oksigeniaaravo') . ' · ' . $month,
+            'count' => get_string('nofn', 'block_oksigeniaaravo', ['a' => $in['used'], 'b' => $in['allowed']]),
+            'segments' => $segments,
+            'available' => $in['used'] < $in['allowed'],
+        ];
     }
 
     /**

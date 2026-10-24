@@ -17,24 +17,24 @@
 {{!
     @template block_oksigeniaaravo/register
 
-    The full register: the bag, this month's intervention, the per-month summary and the work log, with the download.
+    The full register: the bag, this month's interventions, the per-month summary and the work log, with the download.
 
     Example context (json):
     {
-        "updated": "Updated at 4 Nov, 09:12",
+        "brand": "Oksigenia support",
+        "updated": "Updated on 4 November 2026 at 09:12",
         "failed": false,
-        "bag": {"remaining": "3 h 45 min", "summary": "6 h 15 min used of 10 h", "percent": 37, "low": false, "numberclass": "", "barclass": "bg-success"},
-        "interventions": {"text": "Intervention of the month: available", "tone": "text-success"},
+        "bag": {"remaining": "3 h 30 min", "line": "3 h 30 min left of 10 h · 6 h 30 min used", "percent": 35, "numberclass": "", "barclass": "bg-warning", "statusword": "Low balance"},
+        "intervention": {"label": "Included interventions · November 2026", "count": "1 of 2", "segments": [{"filled": true}, {"filled": false}]},
         "hassummary": true,
         "summary": [
-            {"month": "November 2026", "interventions": "0 of 1", "bag": "0 min", "outofbag": "0 min", "maintenance": "1 h"}
+            {"month": "November 2026", "interventions": "1 of 2", "bag": "30 min", "outofbag": "0 min", "maintenance": "0 min"}
         ],
         "hasentries": true,
         "entries": [
-            {"date": "4 November 2026", "description": "Added 12 users", "minutes": "30 min", "type": "From the bag", "typetone": "text-primary"}
+            {"date": "4 November 2026", "description": "Added 12 users", "minutes": "30 min", "type": "From the bag", "typedot": "text-primary"}
         ],
-        "downloadcsv": "https://example.com/blocks/oksigeniaaravo/index.php?dataformat=csv",
-        "downloadexcel": "https://example.com/blocks/oksigeniaaravo/index.php?dataformat=excel"
+        "downloadform": "<form>…</form>"
     }
 }}
 <div class="block-oksigeniaaravo-register">
@@ -45,19 +45,25 @@
         {{#bag}}
             <div class="aravo-card">
                 <h3 class="aravo-label text-muted">{{#str}} bagtitle, block_oksigeniaaravo {{/str}}</h3>
-                <div class="aravo-remaining {{numberclass}}">{{remaining}}</div>
-                <div class="progress aravo-progress my-2" role="progressbar" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="aravo-figurerow">
+                    <span class="aravo-remaining {{numberclass}}">{{remaining}}</span>
+                    {{#statusword}}<span class="aravo-status">{{statusword}}</span>{{/statusword}}
+                </div>
+                <div class="progress aravo-progress my-2" role="progressbar" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100" aria-valuetext="{{line}}">
                     <div class="progress-bar {{barclass}}" style="width: {{percent}}%;"></div>
                 </div>
-                <div class="small text-muted">{{summary}}</div>
+                <div class="small text-muted">{{line}}</div>
             </div>
         {{/bag}}
-        {{#interventions}}
+        {{#intervention}}
             <div class="aravo-card">
-                <h3 class="aravo-label text-muted">{{#str}} interventiontitle, block_oksigeniaaravo {{/str}}</h3>
-                <div class="mt-1"><span class="aravo-chip {{tone}}">{{text}}</span></div>
+                <h3 class="aravo-label text-muted">{{label}}</h3>
+                <div class="aravo-remaining">{{count}}</div>
+                <div class="aravo-segments text-primary mt-2">
+                    {{#segments}}<span class="aravo-seg {{#filled}}filled{{/filled}}"></span>{{/segments}}
+                </div>
             </div>
-        {{/interventions}}
+        {{/intervention}}
     </div>
     {{#hassummary}}
         <h2 class="aravo-label text-muted">{{#str}} summarytitle, block_oksigeniaaravo {{/str}}</h2>
@@ -74,7 +80,13 @@
                 </thead>
                 <tbody>
                     {{#summary}}
-                        <tr><td>{{month}}</td><td>{{interventions}}</td><td class="aravo-num">{{bag}}</td><td class="aravo-num">{{outofbag}}</td><td class="aravo-num">{{maintenance}}</td></tr>
+                        <tr>
+                            <td data-label="{{#str}} colmonth, block_oksigeniaaravo {{/str}}">{{month}}</td>
+                            <td data-label="{{#str}} colinterventions, block_oksigeniaaravo {{/str}}">{{interventions}}</td>
+                            <td class="aravo-num" data-label="{{#str}} colbag, block_oksigeniaaravo {{/str}}">{{bag}}</td>
+                            <td class="aravo-num" data-label="{{#str}} coloutofbag, block_oksigeniaaravo {{/str}}">{{outofbag}}</td>
+                            <td class="aravo-num" data-label="{{#str}} colmaintenance, block_oksigeniaaravo {{/str}}">{{maintenance}}</td>
+                        </tr>
                     {{/summary}}
                 </tbody>
             </table>
@@ -83,13 +95,10 @@
     {{#hasentries}}
         <div class="aravo-worktop d-flex flex-wrap justify-content-between align-items-center mb-2">
             <h2 class="aravo-label text-muted mb-0">{{#str}} worktitle, block_oksigeniaaravo {{/str}}</h2>
-            <div class="aravo-downloads">
-                <a class="btn btn-outline-secondary btn-sm" href="{{downloadcsv}}">{{#str}} downloadcsv, block_oksigeniaaravo {{/str}}</a>
-                <a class="btn btn-outline-secondary btn-sm" href="{{downloadexcel}}">{{#str}} downloadexcel, block_oksigeniaaravo {{/str}}</a>
-            </div>
+            <div class="aravo-downloads">{{{downloadform}}}</div>
         </div>
         <div class="table-responsive">
-            <table class="table aravo-table mb-0">
+            <table class="table aravo-table aravo-worklog mb-0">
                 <thead>
                     <tr>
                         <th scope="col">{{#str}} coldate, block_oksigeniaaravo {{/str}}</th>
@@ -101,10 +110,10 @@
                 <tbody>
                     {{#entries}}
                         <tr>
-                            <td class="text-nowrap">{{date}}</td>
-                            <td>{{description}}</td>
-                            <td class="aravo-num">{{minutes}}</td>
-                            <td><span class="{{typetone}}">{{type}}</span></td>
+                            <td class="text-nowrap" data-label="{{#str}} coldate, block_oksigeniaaravo {{/str}}">{{date}}</td>
+                            <td data-label="{{#str}} coldescription, block_oksigeniaaravo {{/str}}">{{description}}</td>
+                            <td class="aravo-num" data-label="{{#str}} colminutes, block_oksigeniaaravo {{/str}}">{{minutes}}</td>
+                            <td data-label="{{#str}} coltype, block_oksigeniaaravo {{/str}}"><span class="aravo-dot {{typedot}}" aria-hidden="true">●</span> {{type}}</td>
                         </tr>
                     {{/entries}}
                 </tbody>
@@ -112,9 +121,7 @@
         </div>
     {{/hasentries}}
     {{#centraladminurl}}
-        <p><a href="{{centraladminurl}}">{{#str}} centraladmin, block_oksigeniaaravo {{/str}}</a></p>
+        <p class="mt-3"><a href="{{centraladminurl}}">{{#str}} centraladmin, block_oksigeniaaravo {{/str}}</a></p>
     {{/centraladminurl}}
-    {{#updated}}
-        <p class="small text-muted">{{updated}}</p>
-    {{/updated}}
+    <p class="small text-muted mt-2">{{#brand}}{{brand}} · {{/brand}}{{updated}}</p>
 </div>

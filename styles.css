@@ -8,11 +8,25 @@
     text-transform: uppercase;
 }
 
+.block-oksigeniaaravo .aravo-figurerow,
+.block-oksigeniaaravo-register .aravo-figurerow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
 .block-oksigeniaaravo .aravo-remaining,
 .block-oksigeniaaravo-register .aravo-remaining {
     font-size: 2rem;
     font-weight: 700;
     line-height: 1.1;
+}
+
+.block-oksigeniaaravo .aravo-status,
+.block-oksigeniaaravo-register .aravo-status {
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
 .block-oksigeniaaravo .aravo-progress,
@@ -28,15 +42,27 @@
     border-radius: 999px;
 }
 
-.block-oksigeniaaravo .aravo-chip,
-.block-oksigeniaaravo-register .aravo-chip {
-    display: inline-block;
-    padding: 0.12rem 0.6rem;
-    border: 1px solid currentcolor;
+.block-oksigeniaaravo-register .aravo-segments {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.3rem;
+}
+
+.block-oksigeniaaravo-register .aravo-seg {
+    flex: 0 0 2.5rem;
+    height: 0.5rem;
     border-radius: 999px;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    line-height: 1.5;
+    background-color: rgba(127, 127, 127, 0.25);
+}
+
+.block-oksigeniaaravo-register .aravo-seg.filled {
+    background-color: currentcolor;
+}
+
+.block-oksigeniaaravo .aravo-dot,
+.block-oksigeniaaravo-register .aravo-dot {
+    font-size: 0.7em;
+    vertical-align: middle;
 }
 
 .block-oksigeniaaravo .aravo-worklist {
@@ -75,4 +101,41 @@
 
 .block-oksigeniaaravo-register .aravo-num {
     text-align: right;
+}
+
+@media (max-width: 575.98px) {
+    .block-oksigeniaaravo-register .aravo-table thead {
+        display: none;
+    }
+
+    .block-oksigeniaaravo-register .aravo-table,
+    .block-oksigeniaaravo-register .aravo-table tbody,
+    .block-oksigeniaaravo-register .aravo-table tr,
+    .block-oksigeniaaravo-register .aravo-table td {
+        display: block;
+        width: auto;
+    }
+
+    .block-oksigeniaaravo-register .aravo-table tr {
+        padding: 0.5rem 0;
+        border-top: 1px solid rgba(127, 127, 127, 0.2);
+    }
+
+    .block-oksigeniaaravo-register .aravo-table td {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.15rem 0;
+        border: 0;
+        text-align: left;
+    }
+
+    .block-oksigeniaaravo-register .aravo-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+    }
+
+    .block-oksigeniaaravo-register .aravo-num {
+        text-align: left;
+    }
 }

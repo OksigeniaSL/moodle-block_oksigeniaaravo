@@ -33,8 +33,8 @@ class block_oksigeniaaravo extends block_base {
      * @return void
      */
     public function init() {
-        $provider = trim((string) get_config('block_oksigeniaaravo', 'provider'));
-        $this->title = $provider !== '' ? $provider : get_string('pluginname', 'block_oksigeniaaravo');
+        // A clean title for whoever uses it; the provider brand goes small at the foot of the card.
+        $this->title = get_string('blocktitle', 'block_oksigeniaaravo');
     }
 
     /**

@@ -118,7 +118,7 @@ final class snapshot_test extends \advanced_testcase {
         $this->assertEquals('3 h 45 min', $context['bag']['remaining']);
         $this->assertEquals(38, $context['bag']['percent']);
         $this->assertFalse($context['bag']['low']);
-        $this->assertNotEmpty($context['interventions']);
+        $this->assertNotEmpty($context['interventionline']);
         $this->assertFalse($context['failed']);
     }
 

@@ -35,7 +35,7 @@ require_capability('block/oksigeniaaravo:view', $context);
 
 $dataformat = optional_param('dataformat', '', PARAM_ALPHA);
 if ($dataformat !== '') {
-    require_sesskey();
+    // A read-only export of the same data the page already shows, so no sesskey is needed, like other Moodle tables.
     $snap = snapshot::from_store();
     $rows = $snap ? presenter::export_rows($snap) : [];
     $columns = presenter::export_columns();
@@ -70,6 +70,12 @@ if (!$snap) {
     echo $OUTPUT->notification(get_string('nodatayet', 'block_oksigeniaaravo'), 'info');
 } else {
     $data = presenter::page($snap, store::get(), is_siteadmin());
+    if (!empty($data['hasentries'])) {
+        $data['downloadform'] = $OUTPUT->download_dataformat_selector(
+            get_string('download'),
+            (new moodle_url('/blocks/oksigeniaaravo/index.php'))->out(false)
+        );
+    }
     echo $OUTPUT->render_from_template('block_oksigeniaaravo/register', $data);
 }
 echo $OUTPUT->footer();

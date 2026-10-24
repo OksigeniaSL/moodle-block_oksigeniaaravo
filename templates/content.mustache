@@ -21,20 +21,21 @@
 
     Example context (json):
     {
-        "updated": "Updated at 4 Nov, 09:12",
+        "brand": "Oksigenia support",
+        "updated": "Updated on 4 November 2026 at 09:12",
         "failed": false,
         "bag": {
-            "remaining": "3 h 45 min",
-            "summary": "6 h 15 min used of 10 h",
-            "percent": 37,
-            "low": false,
+            "remaining": "3 h 30 min",
+            "line": "3 h 30 min left of 10 h · 6 h 30 min used",
+            "percent": 35,
             "numberclass": "",
-            "barclass": "bg-success"
+            "barclass": "bg-warning",
+            "statusword": "Low balance"
         },
-        "interventions": {"text": "Included intervention (November 2026): available", "tone": "text-success"},
+        "interventionline": "Interventions for November 2026: 1 of 2",
         "hasrecent": true,
         "recent": [
-            {"date": "4 November 2026", "description": "Added 12 users", "minutes": "30 min", "type": "From the bag", "typetone": "text-primary"}
+            {"date": "4 November 2026", "description": "Added 12 users", "minutes": "30 min", "type": "From the bag", "typedot": "text-primary"}
         ],
         "registerurl": "https://example.com/blocks/oksigeniaaravo/index.php"
     }
@@ -50,30 +51,31 @@
         {{#bag}}
             <div class="aravo-bag mb-3">
                 <div class="aravo-label text-muted">{{#str}} bagtitle, block_oksigeniaaravo {{/str}}</div>
-                <div class="aravo-remaining {{numberclass}}">{{remaining}}</div>
-                <div class="progress aravo-progress my-1" role="progressbar" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="aravo-figurerow">
+                    <span class="aravo-remaining {{numberclass}}">{{remaining}}</span>
+                    {{#statusword}}<span class="aravo-status">{{statusword}}</span>{{/statusword}}
+                </div>
+                <div class="progress aravo-progress my-1" role="progressbar" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100" aria-valuetext="{{line}}">
                     <div class="progress-bar {{barclass}}" style="width: {{percent}}%;"></div>
                 </div>
-                <div class="small text-muted">{{summary}}</div>
+                <div class="small text-muted">{{line}}</div>
             </div>
         {{/bag}}
-        {{#interventions}}
-            <div class="aravo-intervention mb-3"><span class="aravo-chip {{tone}}">{{text}}</span></div>
-        {{/interventions}}
+        {{#interventionline}}
+            <p class="aravo-intervention mb-3">{{.}}</p>
+        {{/interventionline}}
         {{#hasrecent}}
             <div class="aravo-label text-muted">{{#str}} recenttitle, block_oksigeniaaravo {{/str}}</div>
             <ul class="aravo-worklist list-unstyled mb-3">
                 {{#recent}}
                     <li class="aravo-work">
                         <div class="aravo-work-main">{{description}}</div>
-                        <div class="small text-muted">{{date}} · {{minutes}} · <span class="{{typetone}}">{{type}}</span></div>
+                        <div class="small text-muted">{{date}} · {{minutes}} · <span class="aravo-dot {{typedot}}" aria-hidden="true">●</span> {{type}}</div>
                     </li>
                 {{/recent}}
             </ul>
         {{/hasrecent}}
         <a class="aravo-more" href="{{registerurl}}">{{#str}} fullregister, block_oksigeniaaravo {{/str}} →</a>
-        {{#updated}}
-            <div class="small text-muted mt-2">{{updated}}</div>
-        {{/updated}}
+        <div class="small text-muted mt-2">{{#brand}}{{brand}} · {{/brand}}{{updated}}</div>
     {{/empty}}
 </div>

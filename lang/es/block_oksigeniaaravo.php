@@ -50,26 +50,24 @@ $string['durationh'] = '{$a->h} h';
 $string['durationm'] = '{$a->m} min';
 
 // Bloque y registro.
+$string['blocktitle'] = 'Horas de soporte';
 $string['bagtitle'] = 'Bolsa de horas';
-$string['bagusedof'] = '{$a->used} usadas de {$a->purchased}';
+$string['bagline'] = 'Quedan {$a->remaining} de {$a->purchased} · usadas {$a->used}';
+$string['bagstatuslow'] = 'Saldo bajo';
+$string['bagstatusempty'] = 'Bolsa agotada';
 $string['couldnotupdate'] = 'No se han podido actualizar los datos; se muestra la última copia.';
 $string['recenttitle'] = 'Últimos trabajos';
 $string['fullregister'] = 'Registro completo';
-$string['updatedat'] = 'Actualizado a las {$a}';
+$string['updatedat'] = 'Actualizado el {$a->date} a las {$a->time}';
 $string['nodatayet'] = 'Todavía no hay nada que mostrar.';
 $string['registertitle'] = 'Horas de soporte';
-$string['interventiontitle'] = 'Intervención del mes';
 $string['summarytitle'] = 'Por mes';
 $string['worktitle'] = 'Registro de trabajos';
-$string['downloadcsv'] = 'Descargar CSV';
-$string['downloadexcel'] = 'Descargar Excel';
 $string['centraladmin'] = 'Abrir en el registro central (administradores)';
 
-// La intervención del mes.
-$string['interventionavailable'] = 'Intervención incluida ({$a}): disponible';
-$string['interventionused'] = 'Intervención incluida ({$a->month}): usada el {$a->date} ({$a->mins})';
-$string['interventionusedplain'] = 'Intervención incluida ({$a}): usada';
-$string['interventionsused'] = 'Intervenciones incluidas ({$a->month}): {$a->used} de {$a->allowed} usadas';
+// Las intervenciones incluidas del mes.
+$string['interventionstitle'] = 'Intervenciones incluidas';
+$string['interventionline'] = 'Intervenciones de {$a->month}: {$a->used} de {$a->allowed}';
 
 // Tablas.
 $string['nofn'] = '{$a->a} de {$a->b}';

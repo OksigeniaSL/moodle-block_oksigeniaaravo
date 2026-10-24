@@ -50,26 +50,24 @@ $string['durationh'] = '{$a->h} h';
 $string['durationm'] = '{$a->m} min';
 
 // Block and register.
+$string['blocktitle'] = 'Support hours';
 $string['bagtitle'] = 'Hours bank';
-$string['bagusedof'] = '{$a->used} used of {$a->purchased}';
+$string['bagline'] = '{$a->remaining} left of {$a->purchased} · {$a->used} used';
+$string['bagstatuslow'] = 'Low balance';
+$string['bagstatusempty'] = 'Bag used up';
 $string['couldnotupdate'] = 'The data could not be updated; showing the last copy.';
 $string['recenttitle'] = 'Latest work';
 $string['fullregister'] = 'Full register';
-$string['updatedat'] = 'Updated at {$a}';
+$string['updatedat'] = 'Updated on {$a->date} at {$a->time}';
 $string['nodatayet'] = 'There is nothing to show yet.';
 $string['registertitle'] = 'Support hours';
-$string['interventiontitle'] = 'Intervention of the month';
 $string['summarytitle'] = 'By month';
 $string['worktitle'] = 'Work log';
-$string['downloadcsv'] = 'Download CSV';
-$string['downloadexcel'] = 'Download Excel';
 $string['centraladmin'] = 'Open in the central registry (administrators)';
 
-// This month's intervention.
-$string['interventionavailable'] = 'Included intervention ({$a}): available';
-$string['interventionused'] = 'Included intervention ({$a->month}): used on {$a->date} ({$a->mins})';
-$string['interventionusedplain'] = 'Included intervention ({$a}): used';
-$string['interventionsused'] = 'Included interventions ({$a->month}): {$a->used} of {$a->allowed} used';
+// This month's included interventions.
+$string['interventionstitle'] = 'Included interventions';
+$string['interventionline'] = 'Interventions for {$a->month}: {$a->used} of {$a->allowed}';
 
 // Tables.
 $string['nofn'] = '{$a->a} of {$a->b}';

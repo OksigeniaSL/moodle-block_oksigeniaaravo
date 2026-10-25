@@ -429,7 +429,7 @@
 
 @keyframes aravo-arc-in {
     from {
-        stroke-dasharray: 0 100;
+        stroke-dasharray: 0 200;
     }
 }
 

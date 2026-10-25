@@ -5,6 +5,10 @@ All notable changes to this plugin are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+- A half-moon gauge at 0% no longer shows a stray second dot at the far end of the arc (the round-capped
+  `stroke-dasharray` pattern repeated); the gap is now longer than the path so only the start dot shows.
+
 ### Added
 - "At no cost" cards next to the ring: the contract's included work (interventions, the welcome allowance and plan
   maintenance) as a headline figure with the accumulated total, its period, a split bar by type and this month's

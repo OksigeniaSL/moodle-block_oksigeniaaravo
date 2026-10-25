@@ -41,11 +41,12 @@
         "registerurl": "https://example.com/blocks/oksigeniaaravo/index.php"
     }
 }}
-<div class="block-oksigeniaaravo">
+<div class="block-oksigeniaaravo"{{^empty}} data-aravo-summary="{{summaryline}}" data-aravo-intro="{{#str}} cardintro, block_oksigeniaaravo {{/str}}"{{/empty}}>
     {{#empty}}
         <p class="text-muted mb-0">{{message}}</p>
     {{/empty}}
     {{^empty}}
+    <div class="aravo-detail">
         {{#failed}}
             <p class="small text-muted mb-2">{{#str}} couldnotupdate, block_oksigeniaaravo {{/str}}</p>
         {{/failed}}
@@ -94,5 +95,6 @@
         {{/hasrecent}}
         <a class="aravo-more" href="{{registerurl}}">{{#str}} fullregister, block_oksigeniaaravo {{/str}} →</a>
         <div class="small text-muted mt-2">{{#brand}}{{brand}} · {{/brand}}{{updated}}</div>
+    </div>
     {{/empty}}
 </div>

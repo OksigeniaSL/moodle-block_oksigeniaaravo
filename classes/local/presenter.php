@@ -62,7 +62,30 @@ class presenter {
         if ($recent) {
             $context['recent'] = $recent;
         }
+        $context['summaryline'] = self::summary_line($snap);
         return $context;
+    }
+
+    /**
+     * The compact one-line summary shown when the card is collapsed (bag balance and this month's interventions).
+     *
+     * @param snapshot $snap The snapshot to summarise.
+     * @return string
+     */
+    private static function summary_line(snapshot $snap): string {
+        $parts = [];
+        if ($snap->has_bag()) {
+            $parts[] = get_string('summarybag', 'block_oksigeniaaravo', minutes::format($snap->bag()['remaining']));
+        }
+        $in = $snap->interventions();
+        if ((int) $in['allowed'] > 0) {
+            $parts[] = get_string('summarymonth', 'block_oksigeniaaravo',
+                ['used' => (int) $in['used'], 'allowed' => (int) $in['allowed']]);
+        }
+        if (!$parts) {
+            return get_string('summarydefault', 'block_oksigeniaaravo');
+        }
+        return implode(' · ', $parts);
     }
 
     /**

@@ -69,6 +69,12 @@ $string['summarytitle'] = 'Por mes';
 $string['worktitle'] = 'Registro de trabajos';
 $string['centraladmin'] = 'Abrir en el registro central (administradores)';
 
+// Tarjeta plegable.
+$string['summarybag'] = '{$a} en la bolsa';
+$string['summarymonth'] = '{$a->used} de {$a->allowed} este mes';
+$string['summarydefault'] = 'Ver el soporte dedicado';
+$string['cardintro'] = 'Esto solo lo ve la gestión de la plataforma: el tiempo de soporte que dedicamos a tus servicios.';
+
 // Uso del plan.
 $string['usagetitle'] = 'Uso del plan';
 $string['usageusers'] = 'Usuarios activos (30 días)';

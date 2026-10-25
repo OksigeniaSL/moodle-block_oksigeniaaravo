@@ -118,6 +118,81 @@
     font-weight: 700;
 }
 
+/* Collapsible card: a compact bar the manager can open, and a one-time intro note. */
+.block-oksigeniaaravo .aravo-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    margin: 0;
+    padding: 0 0 0.5rem;
+    background: none;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.block-oksigeniaaravo .aravo-toggle-text {
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.block-oksigeniaaravo .aravo-toggle-chevron {
+    flex: 0 0 auto;
+    width: 0;
+    height: 0;
+    border-right: 0.3rem solid transparent;
+    border-bottom: 0.35rem solid currentcolor;
+    border-left: 0.3rem solid transparent;
+    opacity: 0.55;
+}
+
+.block-oksigeniaaravo.aravo-collapsed .aravo-toggle-chevron {
+    transform: rotate(180deg);
+}
+
+.block-oksigeniaaravo .aravo-toggle:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 2px;
+}
+
+.block-oksigeniaaravo .aravo-detail-wrap {
+    overflow: hidden;
+}
+
+.block-oksigeniaaravo .aravo-intro {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background-color: rgba(127, 127, 127, 0.12);
+    font-size: 0.8rem;
+}
+
+.block-oksigeniaaravo .aravo-intro-out {
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .block-oksigeniaaravo .aravo-toggle-chevron {
+        transition: transform 0.3s ease;
+    }
+
+    .block-oksigeniaaravo .aravo-detail-wrap {
+        transition: height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .block-oksigeniaaravo .aravo-intro {
+        animation: aravo-fade 0.4s ease-out both;
+    }
+
+    .block-oksigeniaaravo .aravo-intro-out {
+        transition: opacity 1.4s ease;
+    }
+}
+
 @media (prefers-reduced-motion: no-preference) {
     .block-oksigeniaaravo,
     .block-oksigeniaaravo-register {

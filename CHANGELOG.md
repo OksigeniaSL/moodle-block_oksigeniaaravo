@@ -6,6 +6,9 @@ All notable changes to this plugin are documented here. The format follows
 ## [Unreleased]
 
 ### Added
+- The card opens on entry, shows a one-time note that only the management sees it, then folds itself to a compact
+  one-line summary (bag balance and this month's interventions) that the manager can re-open with a click. Progressive
+  enhancement (an inline AMD module): with JavaScript off the card stays fully shown. Honours `prefers-reduced-motion`.
 - "Included at no cost" figure: the support time done for the client that does not discount the bag (included
   interventions, the first-month courtesy and plan maintenance), so the value of the work is visible.
 

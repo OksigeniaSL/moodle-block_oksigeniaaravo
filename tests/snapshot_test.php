@@ -125,6 +125,24 @@ final class snapshot_test extends \advanced_testcase {
         $this->assertEquals('30 min', $context['included']);
     }
 
+    public function test_the_card_has_a_compact_summary_line(): void {
+        $snap = new snapshot($this->example());
+        $context = presenter::card($snap, (object) ['status' => 'ok', 'fetchedat' => time()]);
+        $this->assertArrayHasKey('summaryline', $context);
+        // It leads with the bag balance and names this month's interventions.
+        $this->assertStringContainsString('3 h 45 min', $context['summaryline']);
+        $this->assertStringContainsString('·', $context['summaryline']);
+    }
+
+    public function test_the_summary_line_falls_back_without_a_bag_or_interventions(): void {
+        $data = $this->example();
+        $data['bag'] = ['has_bag' => false];
+        $data['interventions'] = ['month' => '2026-11', 'allowed' => 0, 'used' => 0, 'items' => []];
+        $snap = new snapshot($data);
+        $context = presenter::card($snap, (object) ['status' => 'ok', 'fetchedat' => time()]);
+        $this->assertNotEmpty($context['summaryline']);
+    }
+
     public function test_the_card_shows_plan_usage_only_when_measured(): void {
         $snap = new snapshot($this->example());
         // No usage measured yet: no section.

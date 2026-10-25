@@ -69,6 +69,12 @@ $string['summarytitle'] = 'By month';
 $string['worktitle'] = 'Work log';
 $string['centraladmin'] = 'Open in the central registry (administrators)';
 
+// Collapsible card.
+$string['summarybag'] = '{$a} in the bank';
+$string['summarymonth'] = '{$a->used} of {$a->allowed} this month';
+$string['summarydefault'] = 'See the support provided';
+$string['cardintro'] = 'Only the platform management sees this: the support time we spend on your services.';
+
 // Plan usage.
 $string['usagetitle'] = 'Plan usage';
 $string['usageusers'] = 'Active users (30 days)';

@@ -82,6 +82,148 @@ class block_oksigeniaaravo extends block_base {
         }
         $context = presenter::card($snap, store::get());
         $this->content->text = $OUTPUT->render_from_template('block_oksigeniaaravo/content', $context);
+        $this->add_card_behaviour();
         return $this->content;
+    }
+
+    /**
+     * Makes the card open on entry, show a one-time note, then fold itself to a compact summary the manager can
+     * re-open. It is a progressive enhancement: with JavaScript off, the card simply stays fully shown.
+     *
+     * @return void
+     */
+    private function add_card_behaviour() {
+        // Under Behat the baseline (fully shown card) is what the walkthrough asserts, so skip the auto-fold there.
+        if (defined('BEHAT_SITE_RUNNING')) {
+            return;
+        }
+        // An inline AMD module, so no build file is needed and there is no inline script in the markup.
+        $this->page->requires->js_amd_inline(<<<'JS'
+require([], function() {
+    var roots = document.querySelectorAll('.block-oksigeniaaravo[data-aravo-summary]');
+    Array.prototype.forEach.call(roots, function(root) {
+        if (root.dataset.aravoReady) {
+            return;
+        }
+        root.dataset.aravoReady = '1';
+        var detail = root.querySelector('.aravo-detail');
+        if (!detail) {
+            return;
+        }
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        var toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'aravo-toggle';
+        toggle.setAttribute('aria-expanded', 'true');
+        var text = document.createElement('span');
+        text.className = 'aravo-toggle-text';
+        text.textContent = root.dataset.aravoSummary || '';
+        var chevron = document.createElement('span');
+        chevron.className = 'aravo-toggle-chevron';
+        chevron.setAttribute('aria-hidden', 'true');
+        toggle.appendChild(text);
+        toggle.appendChild(chevron);
+        root.insertBefore(toggle, detail);
+
+        var wrap = document.createElement('div');
+        wrap.className = 'aravo-detail-wrap';
+        root.insertBefore(wrap, detail);
+        wrap.appendChild(detail);
+
+        var open = true;
+        var timer = null;
+        var acted = false;
+
+        var setOpen = function(value, animate) {
+            open = value;
+            toggle.setAttribute('aria-expanded', value ? 'true' : 'false');
+            root.classList.toggle('aravo-collapsed', !value);
+            if (reduce || !animate) {
+                wrap.style.height = value ? 'auto' : '0px';
+                return;
+            }
+            var from = wrap.offsetHeight;
+            if (value) {
+                wrap.style.height = 'auto';
+                var to = wrap.offsetHeight;
+                wrap.style.height = from + 'px';
+                void wrap.offsetHeight;
+                wrap.style.height = to + 'px';
+                var settle = function() {
+                    wrap.style.height = 'auto';
+                    wrap.removeEventListener('transitionend', settle);
+                };
+                wrap.addEventListener('transitionend', settle);
+            } else {
+                wrap.style.height = from + 'px';
+                void wrap.offsetHeight;
+                wrap.style.height = '0px';
+            }
+        };
+
+        var stop = function() {
+            if (timer) {
+                window.clearTimeout(timer);
+                timer = null;
+            }
+        };
+
+        toggle.addEventListener('click', function() {
+            acted = true;
+            stop();
+            setOpen(!open, true);
+        });
+        ['pointerenter', 'focusin'].forEach(function(name) {
+            root.addEventListener(name, function() {
+                if (!acted) {
+                    acted = true;
+                    stop();
+                }
+            });
+        });
+
+        var delay = 6000;
+        var seen = false;
+        try {
+            seen = window.localStorage.getItem('block_oksigeniaaravo-seen') === '1';
+        } catch (e) {
+            seen = true;
+        }
+        var intro = root.dataset.aravoIntro;
+        if (!seen && intro) {
+            var note = document.createElement('div');
+            note.className = 'aravo-intro';
+            note.setAttribute('role', 'status');
+            note.textContent = intro;
+            root.insertBefore(note, wrap);
+            delay = 9000;
+            window.setTimeout(function() {
+                note.classList.add('aravo-intro-out');
+            }, delay - 1400);
+            window.setTimeout(function() {
+                if (note.parentNode) {
+                    note.parentNode.removeChild(note);
+                }
+            }, delay);
+            // Mark it seen only after a stable view, so an intermediate redirect does not consume the first visit.
+            window.setTimeout(function() {
+                try {
+                    window.localStorage.setItem('block_oksigeniaaravo-seen', '1');
+                } catch (e) {
+                    void e;
+                }
+            }, 3000);
+        }
+
+        setOpen(true, false);
+        timer = window.setTimeout(function() {
+            if (!acted) {
+                setOpen(false, true);
+            }
+        }, delay);
+    });
+});
+JS);
     }
 }

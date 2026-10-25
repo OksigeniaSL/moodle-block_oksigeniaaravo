@@ -162,6 +162,23 @@ final class snapshot_test extends \advanced_testcase {
         $this->assertEquals(60, $context['usage']['rows'][0]['percent']);
     }
 
+    public function test_a_central_notice_is_shown_when_present(): void {
+        // No notice: nothing in the context.
+        $plain = presenter::card(new snapshot($this->example()), (object) ['status' => 'ok', 'fetchedat' => time()]);
+        $this->assertArrayNotHasKey('notice', $plain);
+        // With a notice: the label and text come through for the template.
+        $data = $this->example();
+        $data['notice'] = ['label' => 'Sample', 'text' => 'Sample data.'];
+        $context = presenter::card(new snapshot($data), (object) ['status' => 'ok', 'fetchedat' => time()]);
+        $this->assertArrayHasKey('notice', $context);
+        $this->assertEquals('Sample', $context['notice']['label']);
+        $this->assertEquals('Sample data.', $context['notice']['text']);
+        // An empty text is treated as no notice.
+        $data['notice'] = ['label' => 'Sample', 'text' => '   '];
+        $empty = presenter::card(new snapshot($data), (object) ['status' => 'ok', 'fetchedat' => time()]);
+        $this->assertArrayNotHasKey('notice', $empty);
+    }
+
     public function test_a_failed_read_is_flagged_when_there_is_a_previous_copy(): void {
         $snap = new snapshot($this->example());
         $context = presenter::card($snap, (object) ['status' => 'http500', 'fetchedat' => time()]);

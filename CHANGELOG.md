@@ -5,6 +5,14 @@ All notable changes to this plugin are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- Central notice: when the snapshot carries a `notice` (a `label` and a `text`), the block and the register show it on
+  top — also when the card is folded. It is meant for the central to mark a site (for example a demo showing sample
+  data); absent on real clients, so nothing shows. The text comes ready from the central; the block only displays it.
+
+### Changed
+- On load the bag ring and the usage gauges sweep up from zero to their value (CSS animation, `prefers-reduced-motion`).
+
 ### Changed
 - Visual redesign of the card: the bag is a ring (with the emblem's ñandutí lace inside and the balance at the
   centre), this month's interventions are pips, the plan usage shows as half-moon gauges, and there is a subtitle.

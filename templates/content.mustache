@@ -25,6 +25,7 @@
     Example context (json):
     {
         "subtitle": "The support time spent on your services · only the management sees it",
+        "notice": {"label": "Sample", "text": "Sample data: on your platform you will see the real hours and work of your contract."},
         "brand": "Oksigenia support",
         "updated": "Updated on 4 November 2026 at 09:12",
         "failed": false,
@@ -50,6 +51,9 @@
     {{#subtitle}}
         <p class="aravo-subtitle">{{.}}</p>
     {{/subtitle}}
+    {{#notice}}
+        <p class="aravo-notice">{{#label}}<span class="aravo-notice-tag">{{label}}</span> {{/label}}{{text}}</p>
+    {{/notice}}
     <div class="aravo-detail">
         {{#failed}}
             <p class="small text-muted mb-2">{{#str}} couldnotupdate, block_oksigeniaaravo {{/str}}</p>

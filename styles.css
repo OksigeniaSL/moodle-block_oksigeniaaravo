@@ -33,6 +33,33 @@
     line-height: 1.4;
 }
 
+/* A notice the central may send (e.g. to mark a demo as sample data); shown on top, also when the card is folded. */
+.block-oksigeniaaravo .aravo-notice,
+.block-oksigeniaaravo-register .aravo-notice {
+    margin: 0 0 1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--bs-warning-bg-subtle, #fff3cd);
+    color: var(--bs-warning-text-emphasis, #664d03);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.block-oksigeniaaravo .aravo-notice-tag,
+.block-oksigeniaaravo-register .aravo-notice-tag {
+    display: inline-block;
+    margin-right: 0.15rem;
+    padding: 0.05rem 0.5rem;
+    border-radius: 999px;
+    background: var(--bs-warning, #ffc107);
+    color: #000;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    vertical-align: 0.05rem;
+}
+
 /* The section labels. */
 .block-oksigeniaaravo .aravo-label {
     margin-bottom: 0.5rem;
@@ -389,6 +416,20 @@
     .block-oksigeniaaravo .aravo-ring-value,
     .block-oksigeniaaravo .aravo-gauge-value {
         transition: none;
+    }
+}
+
+/* On load the arcs sweep up from zero to their value (the inline stroke-dasharray is the implicit end). */
+@media (prefers-reduced-motion: no-preference) {
+    .block-oksigeniaaravo .aravo-ring-value,
+    .block-oksigeniaaravo .aravo-gauge-value {
+        animation: aravo-arc-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+}
+
+@keyframes aravo-arc-in {
+    from {
+        stroke-dasharray: 0 100;
     }
 }
 

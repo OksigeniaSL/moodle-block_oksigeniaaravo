@@ -221,6 +221,27 @@ class snapshot {
     }
 
     /**
+     * A notice the central may send to show on top of the block and the register (for example, to mark a demo site as
+     * showing sample data), or null when there is none. The text comes ready from the central; the block only shows it.
+     *
+     * @return array|null With 'label' (a short tag, may be empty) and 'text' (the line).
+     */
+    public function notice(): ?array {
+        $notice = isset($this->data['notice']) && is_array($this->data['notice']) ? $this->data['notice'] : null;
+        if ($notice === null) {
+            return null;
+        }
+        $text = isset($notice['text']) ? trim((string) $notice['text']) : '';
+        if ($text === '') {
+            return null;
+        }
+        return [
+            'label' => isset($notice['label']) ? trim((string) $notice['label']) : '',
+            'text' => $text,
+        ];
+    }
+
+    /**
      * The central admin link for site administrators, or an empty string.
      *
      * @return string

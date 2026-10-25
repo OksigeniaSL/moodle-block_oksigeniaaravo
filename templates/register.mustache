@@ -24,6 +24,7 @@
         "brand": "Oksigenia support",
         "updated": "Updated on 4 November 2026 at 09:12",
         "failed": false,
+        "notice": {"label": "Sample", "text": "Sample data: on your platform you will see the real hours and work of your contract."},
         "bag": {"remaining": "3 h 30 min", "line": "3 h 30 min left of 10 h · 6 h 30 min used", "percent": 35, "numberclass": "", "barclass": "bg-warning", "statusword": "Low balance"},
         "intervention": {"label": "Included interventions · November 2026", "count": "1 of 2", "segments": [{"filled": true}, {"filled": false}]},
         "usage": {"rows": [{"label": "Active users (30 days)", "text": "120 of 200", "percent": 60, "barclass": ""}, {"label": "Disk", "text": "3.2 GB of 15 GB", "percent": 21, "barclass": ""}]},
@@ -39,6 +40,9 @@
     }
 }}
 <div class="block-oksigeniaaravo-register">
+    {{#notice}}
+        <p class="aravo-notice">{{#label}}<span class="aravo-notice-tag">{{label}}</span> {{/label}}{{text}}</p>
+    {{/notice}}
     {{#failed}}
         <div class="alert alert-warning">{{#str}} couldnotupdate, block_oksigeniaaravo {{/str}}</div>
     {{/failed}}

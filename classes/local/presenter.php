@@ -40,6 +40,10 @@ class presenter {
             'failed' => self::failed($meta),
             'registerurl' => (new \moodle_url('/blocks/oksigeniaaravo/index.php'))->out(false),
         ];
+        $notice = $snap->notice();
+        if ($notice !== null) {
+            $context['notice'] = $notice;
+        }
         if ($snap->has_bag()) {
             $context['bag'] = self::bag($snap->bag());
         }
@@ -104,6 +108,10 @@ class presenter {
             'updated' => self::updated($meta),
             'failed' => self::failed($meta),
         ];
+        $notice = $snap->notice();
+        if ($notice !== null) {
+            $context['notice'] = $notice;
+        }
         if ($snap->has_bag()) {
             $context['bag'] = self::bag($snap->bag());
         }

@@ -171,6 +171,8 @@ class snapshot {
                 'outofbag' => (int) ($entry['out_of_bag_minutes'] ?? 0),
                 'reference' => isset($entry['reference']) && $entry['reference'] !== null
                     ? (string) $entry['reference'] : '',
+                'service' => isset($entry['service']) && $entry['service'] !== null
+                    ? (string) $entry['service'] : '',
             ];
         }
         return $out;

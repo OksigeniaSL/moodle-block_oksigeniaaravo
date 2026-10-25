@@ -79,8 +79,8 @@ class presenter {
         }
         $in = $snap->interventions();
         if ((int) $in['allowed'] > 0) {
-            $parts[] = get_string('summarymonth', 'block_oksigeniaaravo',
-                ['used' => (int) $in['used'], 'allowed' => (int) $in['allowed']]);
+            $a = ['used' => (int) $in['used'], 'allowed' => (int) $in['allowed']];
+            $parts[] = get_string('summarymonth', 'block_oksigeniaaravo', $a);
         }
         if (!$parts) {
             return get_string('summarydefault', 'block_oksigeniaaravo');

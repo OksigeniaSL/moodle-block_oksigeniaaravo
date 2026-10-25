@@ -126,8 +126,31 @@ final class snapshot_test extends \advanced_testcase {
         $this->assertNotEmpty($context['intervention']['text']);
         $this->assertNotEmpty($context['intervention']['pips']);
         $this->assertFalse($context['failed']);
-        // The one included entry (30 min) shows as work done at no cost.
-        $this->assertEquals('30 min', $context['included']);
+        // The one included entry (30 min) shows as the "at no cost" card.
+        $this->assertArrayHasKey('gifts', $context);
+        $this->assertEquals('30 min', $context['gifts']['included']['total']);
+    }
+
+    public function test_the_gifts_card_separates_included_from_courtesy(): void {
+        $data = $this->example();
+        // A maintenance entry (free, counts as included work) and a discretionary courtesy entry (free, shown apart).
+        $data['entries'][] = ['id' => 'e-2', 'date' => '2026-11-02', 'description' => 'Weekly update', 'minutes' => 30,
+            'type' => 'maintenance', 'included_minutes' => 0, 'bag_minutes' => 0, 'out_of_bag_minutes' => 0,
+            'reference' => null];
+        $data['entries'][] = ['id' => 'e-3', 'date' => '2026-11-03', 'description' => 'A gift hour for the team',
+            'minutes' => 60, 'type' => 'courtesy', 'included_minutes' => 0, 'bag_minutes' => 0,
+            'out_of_bag_minutes' => 0, 'reference' => null];
+        $context = presenter::card(new snapshot($data), (object) ['status' => 'ok', 'fetchedat' => time()]);
+        $this->assertArrayHasKey('gifts', $context);
+        // Included = 30 min intervention + 30 min maintenance; the courtesy is not counted here.
+        $this->assertEquals('1 h', $context['gifts']['included']['total']);
+        $this->assertTrue($context['gifts']['included']['hasparts']);
+        $this->assertCount(2, $context['gifts']['included']['parts']);
+        // Courtesy shown apart, with its latest description, and both cards present.
+        $this->assertArrayHasKey('courtesy', $context['gifts']);
+        $this->assertEquals('1 h', $context['gifts']['courtesy']['total']);
+        $this->assertEquals('A gift hour for the team', $context['gifts']['courtesy']['latest']);
+        $this->assertTrue($context['gifts']['two']);
     }
 
     public function test_the_card_has_a_compact_summary_line(): void {

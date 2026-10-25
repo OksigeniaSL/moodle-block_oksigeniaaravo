@@ -34,7 +34,13 @@
             "line": "3 h 30 min left of 10 h · 6 h 30 min used",
             "percent": 35, "state": "low", "statusword": "Low balance"
         },
-        "included": "3 h",
+        "gifts": {
+            "two": true,
+            "courtesy": {"total": "1 h 30 min", "period": "Since 1 July 2026", "latest": "One-hour training for the team"},
+            "included": {"total": "4 h", "period": "Since 1 July 2026", "month": "1 h 30 min", "hasparts": true,
+                "parts": [{"label": "Plan maintenance", "text": "2 h 30 min", "minutes": 150, "kind": "maintenance"},
+                          {"label": "Included interventions", "text": "1 h 30 min", "minutes": 90, "kind": "intervention"}]}
+        },
         "intervention": {"label": "Interventions for November 2026", "text": "1 of 2",
                          "pips": [{"used": true}, {"used": false}]},
         "usage": {"rows": [{"label": "Active users (30 days)", "text": "120 of 200", "percent": 60, "percenttext": "60%", "state": ""}]},
@@ -59,7 +65,7 @@
             <p class="small text-muted mb-2">{{#str}} couldnotupdate, block_oksigeniaaravo {{/str}}</p>
         {{/failed}}
         {{#bag}}
-            <section class="aravo-bag aravo-is-{{state}}" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}">
+            <section class="aravo-bag aravo-is-{{state}}{{#gifts}} aravo-bag-has-gifts{{/gifts}}" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}">
                 <div class="aravo-ring">
                     <svg viewBox="0 0 120 120" role="img" aria-label="{{line}}" focusable="false">
                         <g class="aravo-lace" aria-hidden="true">
@@ -79,9 +85,6 @@
                     <div class="aravo-label">{{#str}} bagtitle, block_oksigeniaaravo {{/str}}{{#bagtip}} {{> core/help_icon }}{{/bagtip}}</div>
                     {{#statusword}}<span class="aravo-status">{{statusword}}</span>{{/statusword}}
                     <p class="aravo-line">{{line}}</p>
-                    {{#included}}
-                        <p class="aravo-included"><span class="aravo-tick" aria-hidden="true"></span>{{#str}} includedtitle, block_oksigeniaaravo {{/str}} · <strong>{{.}}</strong></p>
-                    {{/included}}
                     {{#intervention}}
                         <p class="aravo-intervention">
                             <span class="aravo-pips" aria-hidden="true">{{#pips}}<span class="aravo-pip{{#used}} is-used{{/used}}"></span>{{/pips}}</span>
@@ -89,6 +92,43 @@
                         </p>
                     {{/intervention}}
                 </div>
+                {{#gifts}}
+                    <div class="aravo-gifts{{#two}} aravo-gifts-two{{/two}}">
+                        {{#courtesy}}
+                            <section class="aravo-gift aravo-courtesy" aria-label="{{#str}} courtesytitle, block_oksigeniaaravo {{/str}}: {{total}}, {{period}}">
+                                <div class="aravo-label">
+                                    <svg class="aravo-spark" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0.8C8.6 5.2 10.8 7.4 15.2 8C10.8 8.6 8.6 10.8 8 15.2C7.4 10.8 5.2 8.6 0.8 8C5.2 7.4 7.4 5.2 8 0.8Z"/></svg>
+                                    {{#str}} courtesytitle, block_oksigeniaaravo {{/str}}
+                                </div>
+                                <p class="aravo-gift-total">{{total}}</p>
+                                <p class="aravo-gift-period">{{period}}<br>{{#str}} courtesynote, block_oksigeniaaravo {{/str}}</p>
+                                {{#latest}}
+                                    <p class="aravo-gift-latest">{{#str}} courtesylatest, block_oksigeniaaravo {{/str}}: {{.}}</p>
+                                {{/latest}}
+                            </section>
+                        {{/courtesy}}
+                        {{#included}}
+                            <section class="aravo-gift aravo-included-card" aria-label="{{#str}} includedtitle, block_oksigeniaaravo {{/str}}: {{total}}, {{period}}">
+                                <div class="aravo-label"><span class="aravo-tick" aria-hidden="true"></span>{{#str}} includedtitle, block_oksigeniaaravo {{/str}}</div>
+                                <p class="aravo-gift-total">{{total}}</p>
+                                <p class="aravo-gift-period">{{period}}<br>{{#str}} includednotbag, block_oksigeniaaravo {{/str}}</p>
+                                {{#hasparts}}
+                                    <div class="aravo-included-bar" aria-hidden="true">
+                                        {{#parts}}<span class="aravo-included-seg aravo-kind-{{kind}}" style="flex-grow: {{minutes}};"></span>{{/parts}}
+                                    </div>
+                                {{/hasparts}}
+                                <ul class="aravo-included-parts list-unstyled">
+                                    {{#parts}}
+                                        <li><span class="aravo-included-key aravo-kind-{{kind}}" aria-hidden="true"></span><span class="aravo-included-name">{{label}}</span> <strong>{{text}}</strong></li>
+                                    {{/parts}}
+                                </ul>
+                                {{#month}}
+                                    <p class="aravo-included-month"><span class="aravo-included-name">{{#str}} includedmonth, block_oksigeniaaravo {{/str}}</span> <strong>{{.}}</strong></p>
+                                {{/month}}
+                            </section>
+                        {{/included}}
+                    </div>
+                {{/gifts}}
             </section>
         {{/bag}}
         {{#usage}}

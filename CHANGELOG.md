@@ -6,6 +6,12 @@ All notable changes to this plugin are documented here. The format follows
 ## [Unreleased]
 
 ### Added
+- "At no cost" cards next to the ring: the contract's included work (interventions, the welcome allowance and plan
+  maintenance) as a headline figure with the accumulated total, its period, a split bar by type and this month's
+  amount; and, apart, the discretionary "Courtesy" (work Oksigenia chooses not to charge, outside the contract), shown
+  when the central sends `courtesy` entries. Replaces the small "included" chip.
+
+### Added
 - Central notice: when the snapshot carries a `notice` (a `label` and a `text`), the block and the register show it on
   top — also when the card is folded. It is meant for the central to mark a site (for example a demo showing sample
   data); absent on real clients, so nothing shows. The text comes ready from the central; the block only displays it.

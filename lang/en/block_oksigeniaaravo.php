@@ -77,6 +77,14 @@ $string['summarymonth'] = '{$a->used} of {$a->allowed} this month';
 $string['summarydefault'] = 'See the support provided';
 $string['cardintro'] = 'Only the platform management sees this: the support time we spend on your services.';
 
+// At no cost: included (the contract) and courtesy (discretionary).
+$string['includednotbag'] = 'Not taken from your bag';
+$string['includedmonth'] = 'This month';
+$string['includedsince'] = 'Since {$a}';
+$string['courtesytitle'] = 'Courtesy';
+$string['courtesynote'] = 'Outside the contract, free of charge';
+$string['courtesylatest'] = 'The latest';
+
 // Plan usage.
 $string['usagetitle'] = 'Plan usage';
 $string['usageusers'] = 'Active users (30 days)';
@@ -109,6 +117,7 @@ $string['type_included'] = 'Included intervention';
 $string['type_bag'] = 'From the bag';
 $string['type_out_of_bag'] = 'Out of bag';
 $string['type_maintenance'] = 'Plan maintenance';
+$string['type_courtesy'] = 'Courtesy';
 
 // Privacy.
 $string['privacy:metadata:central_registry'] = 'The block shows support data held in the central registry of Oksigenia, and keeps a local copy so it works when the central does not answer. It stores no personal data about the site\'s users.';

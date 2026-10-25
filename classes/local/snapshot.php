@@ -196,6 +196,7 @@ class snapshot {
                 'bagminutes' => (int) ($month['bag_minutes'] ?? 0),
                 'outofbagminutes' => (int) ($month['out_of_bag_minutes'] ?? 0),
                 'maintenanceminutes' => (int) ($month['maintenance_minutes'] ?? 0),
+                'courtesyminutes' => (int) ($month['courtesy_minutes'] ?? 0),
             ];
         }
         return $out;

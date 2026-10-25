@@ -55,9 +55,9 @@ class presenter {
         if ($usage !== null) {
             $context['usage'] = $usage;
         }
-        $included = self::included_total($snap);
-        if ($included > 0) {
-            $context['included'] = minutes::format($included);
+        $gifts = self::gifts($snap);
+        if ($gifts !== null) {
+            $context['gifts'] = $gifts;
         }
         $recent = [];
         foreach (array_slice($snap->entries(), 0, 3) as $entry) {
@@ -349,8 +349,97 @@ class presenter {
     }
 
     /**
+     * The "at no cost" card(s) for the block: the contract's included work (interventions, the welcome allowance and
+     * plan maintenance) as the headline, and, when there is any, the discretionary courtesy shown apart. Null when
+     * there is nothing free to show.
+     *
+     * @param snapshot $snap The snapshot.
+     * @return array|null
+     */
+    private static function gifts(snapshot $snap): ?array {
+        $interventionmin = 0;
+        $maintenancemin = 0;
+        $monthmin = 0;
+        $incoldest = 0;
+        $courtesymin = 0;
+        $couoldest = 0;
+        $courtesylatest = '';
+        $currentmonth = (string) $snap->interventions()['month'];
+        foreach ($snap->entries() as $entry) {
+            $ts = $entry['date'] !== '' ? strtotime((string) $entry['date']) : 0;
+            if ($entry['type'] === 'courtesy') {
+                // Discretionary: it counts as free and never touches the bag; shown apart from the contract.
+                $courtesymin += (int) $entry['minutes'];
+                if ($ts > 0 && ($couoldest === 0 || $ts < $couoldest)) {
+                    $couoldest = $ts;
+                }
+                if ($courtesylatest === '') {
+                    // Entries come newest first, so the first courtesy seen is the latest.
+                    $courtesylatest = (string) $entry['description'];
+                }
+                continue;
+            }
+            $interventionmin += (int) $entry['included'];
+            if ($entry['type'] === 'maintenance') {
+                $maintenancemin += (int) $entry['minutes'];
+            }
+            if ($currentmonth !== '' && strpos((string) $entry['date'], $currentmonth) === 0) {
+                $monthmin += (int) $entry['included'] + ($entry['type'] === 'maintenance' ? (int) $entry['minutes'] : 0);
+            }
+            if ($ts > 0 && ($incoldest === 0 || $ts < $incoldest)) {
+                $incoldest = $ts;
+            }
+        }
+        $gifts = [];
+        if ($courtesymin > 0) {
+            $courtesy = ['total' => minutes::format($courtesymin), 'period' => self::since($couoldest)];
+            if ($courtesylatest !== '') {
+                $courtesy['latest'] = $courtesylatest;
+            }
+            $gifts['courtesy'] = $courtesy;
+        }
+        $includedtotal = $interventionmin + $maintenancemin;
+        if ($includedtotal > 0) {
+            $parts = [];
+            if ($maintenancemin > 0) {
+                $parts[] = ['label' => self::type_label('maintenance'), 'text' => minutes::format($maintenancemin),
+                    'minutes' => $maintenancemin, 'kind' => 'maintenance'];
+            }
+            if ($interventionmin > 0) {
+                $parts[] = ['label' => get_string('interventionstitle', 'block_oksigeniaaravo'),
+                    'text' => minutes::format($interventionmin), 'minutes' => $interventionmin, 'kind' => 'intervention'];
+            }
+            $included = ['total' => minutes::format($includedtotal), 'period' => self::since($incoldest),
+                'hasparts' => count($parts) >= 2, 'parts' => $parts];
+            if ($monthmin > 0) {
+                $included['month'] = minutes::format($monthmin);
+            }
+            $gifts['included'] = $included;
+        }
+        if (!$gifts) {
+            return null;
+        }
+        $gifts['two'] = isset($gifts['courtesy']) && isset($gifts['included']);
+        return $gifts;
+    }
+
+    /**
+     * A "Since <date>" line in words, for the period a figure accumulates over.
+     *
+     * @param int $ts The start as a Unix time (0 gives an empty string).
+     * @return string
+     */
+    private static function since(int $ts): string {
+        if ($ts <= 0) {
+            return '';
+        }
+        return get_string('includedsince', 'block_oksigeniaaravo',
+            userdate($ts, get_string('strftimedate', 'langconfig')));
+    }
+
+    /**
      * The support time done at no cost over the window: the minutes of the included interventions (and the first-month
-     * courtesy, which are included entries) plus the plan maintenance, none of which discount the bag.
+     * welcome allowance, which are included entries) plus the plan maintenance, none of which discount the bag.
      *
      * @param snapshot $snap The snapshot.
      * @return int
@@ -433,6 +522,7 @@ class presenter {
             'bag' => 'text-primary',
             'out_of_bag' => 'text-danger',
             'maintenance' => 'text-secondary',
+            'courtesy' => 'text-info',
         ];
         return $dots[$type] ?? 'text-secondary';
     }

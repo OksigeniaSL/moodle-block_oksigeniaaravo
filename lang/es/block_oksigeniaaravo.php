@@ -77,6 +77,14 @@ $string['summarymonth'] = '{$a->used} de {$a->allowed} este mes';
 $string['summarydefault'] = 'Ver el soporte dedicado';
 $string['cardintro'] = 'Esto solo lo ve la gestión de la plataforma: el tiempo de soporte que dedicamos a tus servicios.';
 
+// Sin coste: incluido (el contrato) y cortesía (a criterio de Oksigenia).
+$string['includednotbag'] = 'No descuenta de tu bolsa';
+$string['includedmonth'] = 'Este mes';
+$string['includedsince'] = 'Desde el {$a}';
+$string['courtesytitle'] = 'Cortesía';
+$string['courtesynote'] = 'Fuera del contrato y sin cargo';
+$string['courtesylatest'] = 'La última';
+
 // Uso del plan.
 $string['usagetitle'] = 'Uso del plan';
 $string['usageusers'] = 'Usuarios activos (30 días)';
@@ -109,6 +117,7 @@ $string['type_included'] = 'Intervención incluida';
 $string['type_bag'] = 'Con cargo a la bolsa';
 $string['type_out_of_bag'] = 'Fuera de bolsa';
 $string['type_maintenance'] = 'Mantenimiento del plan';
+$string['type_courtesy'] = 'Cortesía';
 
 // Privacidad.
 $string['privacy:metadata:central_registry'] = 'El bloque muestra los datos de soporte que guarda el registro central de Oksigenia y conserva una copia local para funcionar cuando el central no responde. No guarda datos personales de los usuarios del sitio.';

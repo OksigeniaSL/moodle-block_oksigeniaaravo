@@ -5,6 +5,10 @@ All notable changes to this plugin are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- "Included at no cost" figure: the support time done for the client that does not discount the bag (included
+  interventions, the first-month courtesy and plan maintenance), so the value of the work is visible.
+
 ### Changed
 - The bars rise from zero on load and the card eases in (CSS only, guarded by `prefers-reduced-motion`); the figure
   carries more weight and the bars a subtle depth and sheen that read the same in light and dark.

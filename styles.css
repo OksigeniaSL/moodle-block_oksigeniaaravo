@@ -114,6 +114,10 @@
     margin-bottom: 0.5rem;
 }
 
+.block-oksigeniaaravo .aravo-includedval {
+    font-weight: 700;
+}
+
 @media (prefers-reduced-motion: no-preference) {
     .block-oksigeniaaravo,
     .block-oksigeniaaravo-register {

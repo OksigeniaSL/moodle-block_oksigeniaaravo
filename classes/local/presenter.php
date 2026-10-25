@@ -50,6 +50,10 @@ class presenter {
         if ($usage !== null) {
             $context['usage'] = $usage;
         }
+        $included = self::included_total($snap);
+        if ($included > 0) {
+            $context['included'] = minutes::format($included);
+        }
         $recent = [];
         foreach (array_slice($snap->entries(), 0, 3) as $entry) {
             $recent[] = self::entry_row($entry);
@@ -86,6 +90,10 @@ class presenter {
         $usage = self::usage($snap->limits(), $meta);
         if ($usage !== null) {
             $context['usage'] = $usage;
+        }
+        $included = self::included_total($snap);
+        if ($included > 0) {
+            $context['included'] = minutes::format($included);
         }
         $summary = [];
         foreach ($snap->monthly_summary() as $row) {
@@ -275,6 +283,24 @@ class presenter {
             );
         }
         return $rows ? ['rows' => $rows] : null;
+    }
+
+    /**
+     * The support time done at no cost over the window: the minutes of the included interventions (and the first-month
+     * courtesy, which are included entries) plus the plan maintenance, none of which discount the bag.
+     *
+     * @param snapshot $snap The snapshot.
+     * @return int
+     */
+    private static function included_total(snapshot $snap): int {
+        $total = 0;
+        foreach ($snap->entries() as $entry) {
+            $total += $entry['included'];
+            if ($entry['type'] === 'maintenance') {
+                $total += $entry['minutes'];
+            }
+        }
+        return $total;
     }
 
     /**

@@ -62,6 +62,9 @@
                 <div class="small text-muted">{{line}}</div>
             </div>
         {{/bag}}
+        {{#included}}
+            <p class="aravo-included mb-3">{{#str}} includedtitle, block_oksigeniaaravo {{/str}} · <span class="aravo-includedval text-success">{{.}}</span></p>
+        {{/included}}
         {{#interventionline}}
             <p class="aravo-intervention mb-3">{{.}}</p>
         {{/interventionline}}

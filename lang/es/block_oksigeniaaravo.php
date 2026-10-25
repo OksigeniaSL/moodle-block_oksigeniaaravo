@@ -59,6 +59,7 @@ $string['bagline'] = 'Quedan {$a->remaining} de {$a->purchased} · usadas {$a->u
 $string['bagstatuslow'] = 'Saldo bajo';
 $string['bagstatusempty'] = 'Bolsa agotada';
 $string['couldnotupdate'] = 'No se han podido actualizar los datos; se muestra la última copia.';
+$string['includedtitle'] = 'Incluido sin coste';
 $string['recenttitle'] = 'Últimos trabajos';
 $string['fullregister'] = 'Registro completo';
 $string['updatedat'] = 'Actualizado el {$a->date} a las {$a->time}';

@@ -65,6 +65,12 @@
                 </div>
             </div>
         {{/intervention}}
+        {{#included}}
+            <div class="aravo-card">
+                <h3 class="aravo-label text-muted">{{#str}} includedtitle, block_oksigeniaaravo {{/str}}</h3>
+                <div class="aravo-remaining text-success">{{.}}</div>
+            </div>
+        {{/included}}
     </div>
     {{#usage}}
         <h2 class="aravo-label text-muted">{{#str}} usagetitle, block_oksigeniaaravo {{/str}}</h2>

@@ -59,6 +59,7 @@ $string['bagline'] = '{$a->remaining} left of {$a->purchased} · {$a->used} used
 $string['bagstatuslow'] = 'Low balance';
 $string['bagstatusempty'] = 'Bag used up';
 $string['couldnotupdate'] = 'The data could not be updated; showing the last copy.';
+$string['includedtitle'] = 'Included at no cost';
 $string['recenttitle'] = 'Latest work';
 $string['fullregister'] = 'Full register';
 $string['updatedat'] = 'Updated on {$a->date} at {$a->time}';

@@ -121,6 +121,8 @@ final class snapshot_test extends \advanced_testcase {
         $this->assertFalse($context['bag']['low']);
         $this->assertNotEmpty($context['interventionline']);
         $this->assertFalse($context['failed']);
+        // The one included entry (30 min) shows as work done at no cost.
+        $this->assertEquals('30 min', $context['included']);
     }
 
     public function test_the_card_shows_plan_usage_only_when_measured(): void {

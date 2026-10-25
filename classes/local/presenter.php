@@ -433,8 +433,8 @@ class presenter {
         if ($ts <= 0) {
             return '';
         }
-        return get_string('includedsince', 'block_oksigeniaaravo',
-            userdate($ts, get_string('strftimedate', 'langconfig')));
+        $date = userdate($ts, get_string('strftimedate', 'langconfig'));
+        return get_string('includedsince', 'block_oksigeniaaravo', $date);
     }
 
     /**

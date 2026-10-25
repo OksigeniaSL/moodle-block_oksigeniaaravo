@@ -34,6 +34,7 @@ class presenter {
      */
     public static function card(snapshot $snap, \stdClass $meta): array {
         $context = [
+            'subtitle' => get_string('subtitle', 'block_oksigeniaaravo'),
             'brand' => self::brand($snap),
             'updated' => self::updated($meta),
             'failed' => self::failed($meta),
@@ -42,9 +43,9 @@ class presenter {
         if ($snap->has_bag()) {
             $context['bag'] = self::bag($snap->bag());
         }
-        $intervention = self::intervention($snap->interventions());
+        $intervention = self::intervention_card($snap->interventions());
         if ($intervention !== null) {
-            $context['interventionline'] = $intervention['line'];
+            $context['intervention'] = $intervention;
         }
         $usage = self::usage($snap->limits(), $meta);
         if ($usage !== null) {
@@ -260,15 +261,46 @@ class presenter {
             'used' => minutes::format($bag['used']),
         ]);
         $words = ['empty' => 'bagstatusempty', 'low' => 'bagstatuslow'];
+        $split = self::split_duration($remaining);
         return [
+            // Shared by the block card (the ring) and the register page (the figure and the bar).
             'remaining' => minutes::format($remaining),
             'line' => $line,
             'percent' => $percent,
             'low' => $state !== 'ok',
+            'statusword' => isset($words[$state]) ? get_string($words[$state], 'block_oksigeniaaravo') : '',
+            // The register page colours by class; the block card by state word.
             'numberclass' => $state === 'empty' ? 'text-danger' : '',
             'barclass' => $state === 'empty' ? 'bg-danger' : ($state === 'low' ? 'bg-warning' : ''),
-            'statusword' => isset($words[$state]) ? get_string($words[$state], 'block_oksigeniaaravo') : '',
+            'state' => $state,
+            // The block card splits the balance to fit the ring centre, and names the purchased total.
+            'remainingmain' => $split['main'],
+            'remainingrest' => $split['rest'],
+            'of' => get_string('bagof', 'block_oksigeniaaravo', minutes::format($purchased)),
         ];
+    }
+
+    /**
+     * A duration split for the ring centre: the main figure ("3 h", or "8 h", or "30 min") and an optional rest
+     * ("30 min" when there are both hours and minutes).
+     *
+     * @param int $minutes The duration in minutes.
+     * @return array With 'main' and 'rest' (the latter may be empty).
+     */
+    private static function split_duration(int $minutes): array {
+        $minutes = max(0, $minutes);
+        $hours = intdiv($minutes, 60);
+        $mins = $minutes % 60;
+        if ($hours > 0 && $mins > 0) {
+            return [
+                'main' => get_string('durationh', 'block_oksigeniaaravo', ['h' => $hours]),
+                'rest' => get_string('durationm', 'block_oksigeniaaravo', ['m' => $mins]),
+            ];
+        }
+        if ($hours > 0) {
+            return ['main' => get_string('durationh', 'block_oksigeniaaravo', ['h' => $hours]), 'rest' => ''];
+        }
+        return ['main' => get_string('durationm', 'block_oksigeniaaravo', ['m' => $mins]), 'rest' => ''];
     }
 
     /**
@@ -337,13 +369,17 @@ class presenter {
      */
     private static function usage_row(string $label, string $text, float $used, float $limit): array {
         $percent = $limit > 0 ? (int) round($used / $limit * 100) : 0;
+        $percent = max(0, min(100, $percent));
         $over = $used >= $limit;
         $warn = !$over && $percent >= 80;
         return [
             'label' => $label,
             'text' => $text,
-            'percent' => max(0, min(100, $percent)),
+            'percent' => $percent,
+            // The register page colours its bar by class; the block card's gauge by state, with the figure as text.
             'barclass' => $over ? 'bg-danger' : ($warn ? 'bg-warning' : ''),
+            'state' => $over ? 'full' : ($warn ? 'warn' : ''),
+            'percenttext' => get_string('percentformat', 'block_oksigeniaaravo', $percent),
         ];
     }
 
@@ -420,6 +456,29 @@ class presenter {
             'count' => get_string('nofn', 'block_oksigeniaaravo', ['a' => $in['used'], 'b' => $in['allowed']]),
             'segments' => $segments,
             'available' => $in['used'] < $in['allowed'],
+        ];
+    }
+
+    /**
+     * This month's included interventions for the block card: the month label, the "n of m" text, and a pip per
+     * intervention, filled if already used. Null when the plan has none.
+     *
+     * @param array $in This month's interventions from the snapshot.
+     * @return array|null
+     */
+    private static function intervention_card(array $in): ?array {
+        if ($in['allowed'] <= 0) {
+            return null;
+        }
+        $used = max(0, min($in['used'], $in['allowed']));
+        $pips = [];
+        for ($i = 0; $i < $in['allowed']; $i++) {
+            $pips[] = ['used' => $i < $used];
+        }
+        return [
+            'label' => get_string('interventionmonth', 'block_oksigeniaaravo', self::month_name($in['month'])),
+            'text' => get_string('nofn', 'block_oksigeniaaravo', ['a' => $in['used'], 'b' => $in['allowed']]),
+            'pips' => $pips,
         ];
     }
 

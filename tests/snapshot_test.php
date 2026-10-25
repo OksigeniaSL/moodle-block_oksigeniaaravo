@@ -117,9 +117,14 @@ final class snapshot_test extends \advanced_testcase {
         $context = presenter::card($snap, (object) ['status' => 'ok', 'fetchedat' => time()]);
         $this->assertArrayHasKey('bag', $context);
         $this->assertEquals('3 h 45 min', $context['bag']['remaining']);
+        $this->assertEquals('3 h', $context['bag']['remainingmain']);
+        $this->assertEquals('45 min', $context['bag']['remainingrest']);
+        $this->assertEquals('ok', $context['bag']['state']);
         $this->assertEquals(38, $context['bag']['percent']);
         $this->assertFalse($context['bag']['low']);
-        $this->assertNotEmpty($context['interventionline']);
+        $this->assertArrayHasKey('intervention', $context);
+        $this->assertNotEmpty($context['intervention']['text']);
+        $this->assertNotEmpty($context['intervention']['pips']);
         $this->assertFalse($context['failed']);
         // The one included entry (30 min) shows as work done at no cost.
         $this->assertEquals('30 min', $context['included']);

@@ -116,13 +116,20 @@ require([], function() {
         toggle.type = 'button';
         toggle.className = 'aravo-toggle';
         toggle.setAttribute('aria-expanded', 'true');
+        var main = document.createElement('span');
+        main.className = 'aravo-toggle-main';
+        var oks = document.createElement('span');
+        oks.className = 'aravo-oks';
+        oks.setAttribute('aria-hidden', 'true');
         var text = document.createElement('span');
         text.className = 'aravo-toggle-text';
         text.textContent = root.dataset.aravoSummary || '';
+        main.appendChild(oks);
+        main.appendChild(text);
         var chevron = document.createElement('span');
         chevron.className = 'aravo-toggle-chevron';
         chevron.setAttribute('aria-hidden', 'true');
-        toggle.appendChild(text);
+        toggle.appendChild(main);
         toggle.appendChild(chevron);
         root.insertBefore(toggle, detail);
 

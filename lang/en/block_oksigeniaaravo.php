@@ -54,8 +54,10 @@ $string['durationm'] = '{$a->m} min';
 
 // Block and register.
 $string['blocktitle'] = 'Support hours';
+$string['subtitle'] = 'The support time spent on your services · only the management sees it';
 $string['bagtitle'] = 'Hours bank';
 $string['bagline'] = '{$a->remaining} left of {$a->purchased} · {$a->used} used';
+$string['bagof'] = 'of {$a}';
 $string['bagstatuslow'] = 'Low balance';
 $string['bagstatusempty'] = 'Bag used up';
 $string['couldnotupdate'] = 'The data could not be updated; showing the last copy.';
@@ -81,10 +83,12 @@ $string['usageusers'] = 'Active users (30 days)';
 $string['usageusersof'] = '{$a->used} of {$a->limit}';
 $string['usagedisk'] = 'Disk';
 $string['usagediskof'] = '{$a->used} GB of {$a->limit} GB';
+$string['percentformat'] = '{$a}%';
 
 // This month's included interventions.
 $string['interventionstitle'] = 'Included interventions';
 $string['interventionline'] = 'Interventions for {$a->month}: {$a->used} of {$a->allowed}';
+$string['interventionmonth'] = 'Interventions for {$a}';
 
 // Tables.
 $string['nofn'] = '{$a->a} of {$a->b}';

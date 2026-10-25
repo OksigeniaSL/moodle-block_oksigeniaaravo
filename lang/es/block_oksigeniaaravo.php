@@ -54,8 +54,10 @@ $string['durationm'] = '{$a->m} min';
 
 // Bloque y registro.
 $string['blocktitle'] = 'Horas de soporte';
+$string['subtitle'] = 'El tiempo de soporte dedicado a tus servicios · solo lo ve la gestión';
 $string['bagtitle'] = 'Bolsa de horas';
 $string['bagline'] = 'Quedan {$a->remaining} de {$a->purchased} · usadas {$a->used}';
+$string['bagof'] = 'de {$a}';
 $string['bagstatuslow'] = 'Saldo bajo';
 $string['bagstatusempty'] = 'Bolsa agotada';
 $string['couldnotupdate'] = 'No se han podido actualizar los datos; se muestra la última copia.';
@@ -81,10 +83,12 @@ $string['usageusers'] = 'Usuarios activos (30 días)';
 $string['usageusersof'] = '{$a->used} de {$a->limit}';
 $string['usagedisk'] = 'Disco';
 $string['usagediskof'] = '{$a->used} GB de {$a->limit} GB';
+$string['percentformat'] = '{$a} %';
 
 // Las intervenciones incluidas del mes.
 $string['interventionstitle'] = 'Intervenciones incluidas';
 $string['interventionline'] = 'Intervenciones de {$a->month}: {$a->used} de {$a->allowed}';
+$string['interventionmonth'] = 'Intervenciones de {$a}';
 
 // Tablas.
 $string['nofn'] = '{$a->a} de {$a->b}';

@@ -1,124 +1,401 @@
-.block-oksigeniaaravo .aravo-label,
-.block-oksigeniaaravo-register .aravo-label {
-    margin-top: 0;
-    margin-bottom: 0.25rem;
-    font-size: 0.72rem;
+/* ============================================================================
+   Block card (Aravo v2): the bag ring with the ñandutí lace, the month's
+   interventions as pips, the plan usage as half-moon gauges, a subtitle and
+   Oksigenia in sight. Every colour comes from the theme variables (Bootstrap
+   5.3 in Moodle 5.x), so it reads in light, in dark and with each client's
+   brand. Graphs keep 3:1 against the background; text, 4.5:1. The layout
+   adapts with media queries (container queries would be nicer, but the CSS
+   validator on the oldest supported branch does not know them yet).
+   ============================================================================ */
+.block-oksigeniaaravo {
+    --aravo-accent: var(--bs-primary, #0f6cbf);
+    /* A warm amber for the low state: readable on white (about 3.3:1) and clearly amber, not brown. */
+    --aravo-low: #b28705;
+    --aravo-empty: var(--bs-danger, #dc3545);
+    --aravo-ok: var(--bs-success-text-emphasis, #0a3622);
+    --aravo-track: var(--bs-border-color, #dee2e6);
+    --aravo-muted: var(--bs-secondary-color, #6a737b);
+    --aravo-soft: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+/* In dark mode the theme accent lightens (its "text-emphasis"), so the ring and the gauges read. */
+[data-bs-theme="dark"] .block-oksigeniaaravo {
+    --aravo-accent: var(--bs-primary-text-emphasis, #6ea8fe);
+    --aravo-low: var(--bs-warning, #ffc107);
+    --aravo-empty: var(--bs-danger-text-emphasis, #ea868f);
+}
+
+/* The subtitle, close under the block title. */
+.block-oksigeniaaravo .aravo-subtitle {
+    margin: -0.35rem 0 1rem;
+    color: var(--aravo-muted);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+/* The section labels. */
+.block-oksigeniaaravo .aravo-label {
+    margin-bottom: 0.5rem;
+    color: var(--aravo-muted);
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
 
-.block-oksigeniaaravo .aravo-figurerow,
-.block-oksigeniaaravo-register .aravo-figurerow {
+/* --- The bag: the ring and its facts -------------------------------------------------------------------------------- */
+.block-oksigeniaaravo .aravo-bag {
+    display: grid;
+    gap: 0.75rem 1.25rem;
+    justify-items: center;
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .block-oksigeniaaravo .aravo-bag {
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        justify-items: start;
+        text-align: left;
+    }
+}
+
+.block-oksigeniaaravo .aravo-ring {
+    position: relative;
+    width: 8.5rem;
+    height: 8.5rem;
+}
+
+.block-oksigeniaaravo .aravo-ring svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.block-oksigeniaaravo .aravo-ring-track,
+.block-oksigeniaaravo .aravo-ring-value {
+    fill: none;
+    stroke-width: 10;
+}
+
+.block-oksigeniaaravo .aravo-ring-track {
+    stroke: var(--aravo-track);
+}
+
+.block-oksigeniaaravo .aravo-ring-value {
+    stroke: var(--aravo-accent);
+    stroke-linecap: round;
+    transition: stroke-dasharray 0.6s ease;
+}
+
+/* The ñandutí lace of the Aravo emblem, very soft, inside the ring: the bag is also the brand. */
+.block-oksigeniaaravo .aravo-lace path {
+    fill: none;
+    stroke: var(--aravo-accent);
+    stroke-linecap: round;
+    opacity: 0.22;
+}
+
+.block-oksigeniaaravo .aravo-lace-threads {
+    stroke-width: 1;
+}
+
+.block-oksigeniaaravo .aravo-lace-web {
+    stroke-width: 1.4;
+}
+
+.block-oksigeniaaravo .aravo-ring-centre {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.05;
+    text-align: center;
+}
+
+.block-oksigeniaaravo .aravo-remaining {
+    color: var(--bs-emphasis-color, #1d2125);
+    font-size: 1.75rem;
+    font-weight: 800;
+}
+
+.block-oksigeniaaravo .aravo-remaining-rest {
+    color: var(--bs-emphasis-color, #1d2125);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.block-oksigeniaaravo .aravo-ring-of {
+    margin-top: 0.15rem;
+    color: var(--aravo-muted);
+    font-size: 0.75rem;
+}
+
+/* Low and empty: the ring and the label change colour, and the word says it too (colour never stands alone). */
+.block-oksigeniaaravo .aravo-is-low .aravo-ring-value {
+    stroke: var(--aravo-low);
+}
+
+.block-oksigeniaaravo .aravo-is-empty .aravo-ring-value {
+    stroke: var(--aravo-empty);
+}
+
+.block-oksigeniaaravo .aravo-status {
+    display: inline-block;
+    margin-bottom: 0.35rem;
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    background: var(--bs-warning-bg-subtle, #fff3cd);
+    color: var(--bs-warning-text-emphasis, #664d03);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.block-oksigeniaaravo .aravo-is-empty .aravo-status {
+    background: var(--bs-danger-bg-subtle, #f8d7da);
+    color: var(--bs-danger-text-emphasis, #58151c);
+}
+
+.block-oksigeniaaravo .aravo-bag-facts p {
+    margin: 0 0 0.4rem;
+}
+
+.block-oksigeniaaravo .aravo-line {
+    color: var(--aravo-muted);
+    font-size: 0.875rem;
+}
+
+/* Included at no cost: a green chip with a tick. */
+.block-oksigeniaaravo .aravo-included {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.2rem 0.7rem 0.2rem 0.45rem;
+    border-radius: 999px;
+    background: var(--bs-success-bg-subtle, #d1e7dd);
+    color: var(--aravo-ok);
+    font-size: 0.875rem;
+}
+
+.block-oksigeniaaravo .aravo-tick {
+    position: relative;
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+    border-radius: 50%;
+    background: currentcolor;
+}
+
+.block-oksigeniaaravo .aravo-tick::after {
+    content: "";
+    position: absolute;
+    top: 0.2rem;
+    left: 0.35rem;
+    width: 0.28rem;
+    height: 0.5rem;
+    border: solid var(--bs-success-bg-subtle, #d1e7dd);
+    border-width: 0 0.13rem 0.13rem 0;
+    transform: rotate(45deg);
+}
+
+/* The month's interventions: a pip each, filled if already used. */
+.block-oksigeniaaravo .aravo-intervention {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
+    justify-content: inherit;
     gap: 0.5rem;
+    font-size: 0.875rem;
 }
 
-.block-oksigeniaaravo .aravo-remaining,
-.block-oksigeniaaravo-register .aravo-remaining {
-    font-size: 2.3rem;
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
-    font-variant-numeric: tabular-nums;
+@media (max-width: 767.98px) {
+    .block-oksigeniaaravo .aravo-intervention {
+        justify-content: center;
+    }
 }
 
-.block-oksigeniaaravo .aravo-status,
-.block-oksigeniaaravo-register .aravo-status {
-    font-size: 0.8rem;
-    font-weight: 600;
+.block-oksigeniaaravo .aravo-intervention strong,
+.block-oksigeniaaravo .aravo-included strong {
+    white-space: nowrap;
 }
 
-.block-oksigeniaaravo .aravo-progress,
-.block-oksigeniaaravo-register .aravo-progress {
-    height: 0.6rem;
-    border-radius: 999px;
-    overflow: hidden;
-    background-color: rgba(127, 127, 127, 0.18);
-    box-shadow: inset 0 1px 2px rgba(127, 127, 127, 0.25);
-}
-
-.block-oksigeniaaravo .aravo-progress .progress-bar,
-.block-oksigeniaaravo-register .aravo-progress .progress-bar {
-    border-radius: 999px;
-    transform-origin: left center;
-    /* A translucent veil of light (not colour), so it reads as volume in both light and dark. */
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 55%);
-}
-
-.block-oksigeniaaravo-register .aravo-segments {
-    display: flex;
-    justify-content: flex-start;
+.block-oksigeniaaravo .aravo-pips {
+    display: inline-flex;
     gap: 0.3rem;
 }
 
-.block-oksigeniaaravo-register .aravo-seg {
-    flex: 0 0 2.5rem;
-    height: 0.5rem;
-    border-radius: 999px;
-    background-color: rgba(127, 127, 127, 0.25);
+.block-oksigeniaaravo .aravo-pip {
+    width: 0.8rem;
+    height: 0.8rem;
+    border: 2px solid var(--aravo-accent);
+    border-radius: 50%;
 }
 
-.block-oksigeniaaravo-register .aravo-seg.filled {
-    background-color: currentcolor;
+.block-oksigeniaaravo .aravo-pip.is-used {
+    background: var(--aravo-accent);
 }
 
-.block-oksigeniaaravo .aravo-dot,
-.block-oksigeniaaravo-register .aravo-dot {
-    font-size: 0.7em;
-    vertical-align: middle;
+/* --- The plan usage: half-moon gauges ------------------------------------------------------------------------------ */
+.block-oksigeniaaravo .aravo-usage {
+    margin-bottom: 1.25rem;
 }
 
+.block-oksigeniaaravo .aravo-gauges {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+    gap: 0.75rem;
+}
+
+.block-oksigeniaaravo .aravo-gauge {
+    position: relative;
+    margin: 0;
+    padding: 0.6rem 0.6rem 0.7rem;
+    border-radius: 12px;
+    background: var(--aravo-soft);
+    text-align: center;
+}
+
+.block-oksigeniaaravo .aravo-gauge svg {
+    display: block;
+    width: 100%;
+    max-width: 9rem;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.block-oksigeniaaravo .aravo-gauge-track,
+.block-oksigeniaaravo .aravo-gauge-value {
+    fill: none;
+    stroke-width: 11;
+    stroke-linecap: round;
+}
+
+.block-oksigeniaaravo .aravo-gauge-track {
+    stroke: var(--aravo-track);
+}
+
+.block-oksigeniaaravo .aravo-gauge-value {
+    stroke: var(--aravo-accent);
+    transition: stroke-dasharray 0.6s ease;
+}
+
+.block-oksigeniaaravo .aravo-gauge.aravo-is-warn .aravo-gauge-value {
+    stroke: var(--aravo-low);
+}
+
+.block-oksigeniaaravo .aravo-gauge.aravo-is-full .aravo-gauge-value {
+    stroke: var(--aravo-empty);
+}
+
+/* The number, inside the half-moon. */
+.block-oksigeniaaravo .aravo-gauge-number {
+    margin-top: -1.9rem;
+    color: var(--bs-emphasis-color, #1d2125);
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.6rem;
+}
+
+.block-oksigeniaaravo .aravo-gauge figcaption {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+.block-oksigeniaaravo .aravo-gauge-label {
+    font-weight: 600;
+}
+
+.block-oksigeniaaravo .aravo-gauge-text {
+    color: var(--aravo-muted);
+}
+
+/* --- Latest work, the register link and the signature -------------------------------------------------------------- */
 .block-oksigeniaaravo .aravo-worklist {
-    margin-bottom: 0.75rem;
+    margin: 0 0 1rem;
 }
 
 .block-oksigeniaaravo .aravo-work {
-    padding: 0.4rem 0;
-    border-top: 1px solid rgba(127, 127, 127, 0.18);
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--aravo-track);
 }
 
-.block-oksigeniaaravo .aravo-work:first-child {
-    border-top: 0;
+.block-oksigeniaaravo .aravo-work:last-child {
+    border-bottom: 0;
 }
 
 .block-oksigeniaaravo .aravo-work-main {
     font-weight: 600;
+    line-height: 1.35;
+}
+
+.block-oksigeniaaravo .aravo-work-meta {
+    color: var(--aravo-muted);
+    font-size: 0.8rem;
+}
+
+.block-oksigeniaaravo .aravo-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.block-oksigeniaaravo .aravo-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: currentcolor;
 }
 
 .block-oksigeniaaravo .aravo-more {
     font-weight: 600;
 }
 
-.block-oksigeniaaravo-register .aravo-cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+/* Oksigenia in sight: its symbol before "Oksigenia support", in the theme text colour (light and dark). */
+.block-oksigeniaaravo .aravo-sign {
+    margin: 0.75rem 0 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--aravo-track);
+    color: var(--aravo-muted);
+    font-size: 0.8rem;
 }
 
-.block-oksigeniaaravo-register .aravo-card {
-    flex: 1 1 220px;
-    padding: 1rem 1.25rem;
-    border: 1px solid rgba(127, 127, 127, 0.25);
-    border-radius: 0.75rem;
+.block-oksigeniaaravo .aravo-oks {
+    display: inline-block;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-right: 0.35rem;
+    vertical-align: -0.3rem;
+    background: var(--aravo-accent);
+    -webkit-mask: url('[[pix:block_oksigeniaaravo|oksigenia]]') center / contain no-repeat;
+    mask: url('[[pix:block_oksigeniaaravo|oksigenia]]') center / contain no-repeat;
 }
 
-.block-oksigeniaaravo-register .aravo-num {
-    text-align: right;
-}
-
-.block-oksigeniaaravo .aravo-usagerow,
-.block-oksigeniaaravo-register .aravo-usagerow {
-    margin-bottom: 0.5rem;
-}
-
-.block-oksigeniaaravo .aravo-includedval {
+.block-oksigeniaaravo .aravo-brand {
+    color: var(--bs-emphasis-color, #1d2125);
     font-weight: 700;
 }
 
-/* Collapsible card: a compact bar the manager can open, and a one-time intro note. */
+@media (prefers-reduced-motion: reduce) {
+    .block-oksigeniaaravo .aravo-ring-value,
+    .block-oksigeniaaravo .aravo-gauge-value {
+        transition: none;
+    }
+}
+
+/* ============================================================================
+   Collapsible card: a compact bar the manager can open, and a one-time note.
+   Added by the inline AMD module; a progressive enhancement over the card.
+   ============================================================================ */
 .block-oksigeniaaravo .aravo-toggle {
     display: flex;
     align-items: center;
@@ -133,6 +410,12 @@
     font: inherit;
     text-align: left;
     cursor: pointer;
+}
+
+.block-oksigeniaaravo .aravo-toggle-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
 .block-oksigeniaaravo .aravo-toggle-text {
@@ -193,18 +476,113 @@
     }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .block-oksigeniaaravo,
-    .block-oksigeniaaravo-register {
-        animation: aravo-fade 0.5s ease-out both;
+@keyframes aravo-fade {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
     }
 
-    .block-oksigeniaaravo .aravo-progress .progress-bar,
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ============================================================================
+   Register page: the full log, kept in its earlier visual language (bars,
+   segments and stacked tables on small screens).
+   ============================================================================ */
+.block-oksigeniaaravo-register .aravo-label {
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.block-oksigeniaaravo-register .aravo-figurerow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.block-oksigeniaaravo-register .aravo-remaining {
+    font-size: 2.3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.block-oksigeniaaravo-register .aravo-status {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.block-oksigeniaaravo-register .aravo-progress {
+    height: 0.6rem;
+    border-radius: 999px;
+    overflow: hidden;
+    background-color: rgba(127, 127, 127, 0.18);
+    box-shadow: inset 0 1px 2px rgba(127, 127, 127, 0.25);
+}
+
+.block-oksigeniaaravo-register .aravo-progress .progress-bar {
+    border-radius: 999px;
+    transform-origin: left center;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 55%);
+}
+
+.block-oksigeniaaravo-register .aravo-segments {
+    display: flex;
+    justify-content: flex-start;
+    gap: 0.3rem;
+}
+
+.block-oksigeniaaravo-register .aravo-seg {
+    flex: 0 0 2.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background-color: rgba(127, 127, 127, 0.25);
+}
+
+.block-oksigeniaaravo-register .aravo-seg.filled {
+    background-color: currentcolor;
+}
+
+.block-oksigeniaaravo-register .aravo-dot {
+    font-size: 0.7em;
+    vertical-align: middle;
+}
+
+.block-oksigeniaaravo-register .aravo-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.block-oksigeniaaravo-register .aravo-card {
+    flex: 1 1 220px;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(127, 127, 127, 0.25);
+    border-radius: 0.75rem;
+}
+
+.block-oksigeniaaravo-register .aravo-num {
+    text-align: right;
+}
+
+.block-oksigeniaaravo-register .aravo-usagerow {
+    margin-bottom: 0.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
     .block-oksigeniaaravo-register .aravo-progress .progress-bar {
         animation: aravo-bar-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 
-    .block-oksigeniaaravo .aravo-usagerow:nth-of-type(2) .progress-bar,
     .block-oksigeniaaravo-register .aravo-usagerow:nth-of-type(2) .progress-bar {
         animation-delay: 0.12s;
     }
@@ -217,18 +595,6 @@
 
     to {
         transform: scaleX(1);
-    }
-}
-
-@keyframes aravo-fade {
-    from {
-        opacity: 0;
-        transform: translateY(4px);
-    }
-
-    to {
-        opacity: 1;
-        transform: none;
     }
 }
 

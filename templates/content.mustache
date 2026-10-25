@@ -17,27 +17,28 @@
 {{!
     @template block_oksigeniaaravo/content
 
-    The card of the block: the bag, this month's included intervention and the last three works, read from the central.
+    The card of the block: the bag as a ring (with the ñandutí lace of the emblem inside), the month's included
+    interventions as pips, the plan usage as half-moon gauges, a subtitle and Oksigenia in sight. The SVGs are inline
+    (no CDN) and take their colours from the theme variables, so they read in light, in dark and with each client's
+    brand. The card folds to a compact summary; that behaviour is added by the block's inline AMD module.
 
     Example context (json):
     {
+        "subtitle": "The support time spent on your services · only the management sees it",
         "brand": "Oksigenia support",
         "updated": "Updated on 4 November 2026 at 09:12",
         "failed": false,
         "bag": {
-            "remaining": "3 h 30 min",
+            "remainingmain": "3 h", "remainingrest": "30 min", "of": "of 10 h",
             "line": "3 h 30 min left of 10 h · 6 h 30 min used",
-            "percent": 35,
-            "numberclass": "",
-            "barclass": "bg-warning",
-            "statusword": "Low balance"
+            "percent": 35, "state": "low", "statusword": "Low balance"
         },
-        "interventionline": "Interventions for November 2026: 1 of 2",
-        "usage": {"rows": [{"label": "Active users (30 days)", "text": "120 of 200", "percent": 60, "barclass": ""}]},
+        "included": "3 h",
+        "intervention": {"label": "Interventions for November 2026", "text": "1 of 2",
+                         "pips": [{"used": true}, {"used": false}]},
+        "usage": {"rows": [{"label": "Active users (30 days)", "text": "120 of 200", "percent": 60, "percenttext": "60%", "state": ""}]},
         "hasrecent": true,
-        "recent": [
-            {"date": "4 November 2026", "description": "Added 12 users", "minutes": "30 min", "type": "From the bag", "typedot": "text-primary"}
-        ],
+        "recent": [{"date": "4 November 2026", "description": "Added 12 users", "minutes": "30 min", "type": "From the bag", "typedot": "text-primary"}],
         "registerurl": "https://example.com/blocks/oksigeniaaravo/index.php"
     }
 }}
@@ -46,55 +47,79 @@
         <p class="text-muted mb-0">{{message}}</p>
     {{/empty}}
     {{^empty}}
+    {{#subtitle}}
+        <p class="aravo-subtitle">{{.}}</p>
+    {{/subtitle}}
     <div class="aravo-detail">
         {{#failed}}
             <p class="small text-muted mb-2">{{#str}} couldnotupdate, block_oksigeniaaravo {{/str}}</p>
         {{/failed}}
         {{#bag}}
-            <div class="aravo-bag mb-3">
-                <div class="aravo-label text-muted">{{#str}} bagtitle, block_oksigeniaaravo {{/str}}</div>
-                <div class="aravo-figurerow">
-                    <span class="aravo-remaining {{numberclass}}">{{remaining}}</span>
-                    {{#statusword}}<span class="aravo-status">{{statusword}}</span>{{/statusword}}
-                </div>
-                <div class="progress aravo-progress my-1" role="progressbar" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100" aria-valuetext="{{line}}">
-                    <div class="progress-bar {{barclass}}" style="width: {{percent}}%;"></div>
-                </div>
-                <div class="small text-muted">{{line}}</div>
-            </div>
-        {{/bag}}
-        {{#included}}
-            <p class="aravo-included mb-3">{{#str}} includedtitle, block_oksigeniaaravo {{/str}} · <span class="aravo-includedval text-success">{{.}}</span></p>
-        {{/included}}
-        {{#interventionline}}
-            <p class="aravo-intervention mb-3">{{.}}</p>
-        {{/interventionline}}
-        {{#usage}}
-            <div class="aravo-usage mb-3">
-                <div class="aravo-label text-muted">{{#str}} usagetitle, block_oksigeniaaravo {{/str}}</div>
-                {{#rows}}
-                    <div class="aravo-usagerow">
-                        <div class="small d-flex justify-content-between"><span>{{label}}</span><span class="text-muted">{{text}}</span></div>
-                        <div class="progress aravo-progress" role="progressbar" aria-label="{{label}}" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100" aria-valuetext="{{text}}">
-                            <div class="progress-bar {{barclass}}" style="width: {{percent}}%;"></div>
-                        </div>
+            <section class="aravo-bag aravo-is-{{state}}" aria-label="{{#str}} bagtitle, block_oksigeniaaravo {{/str}}">
+                <div class="aravo-ring">
+                    <svg viewBox="0 0 120 120" role="img" aria-label="{{line}}" focusable="false">
+                        <g class="aravo-lace" aria-hidden="true">
+                            <path class="aravo-lace-threads" d="M60 30L60 17M75 34L81.5 22.8M86 45L97.2 38.5M90 60L103 60M86 75L97.2 81.5M75 86L81.5 97.2M60 90L60 103M45 86L38.5 97.2M34 75L22.8 81.5M30 60L17 60M34 45L22.8 38.5M45 34L38.5 22.8"/>
+                            <path class="aravo-lace-web" d="M60 24Q70.8 19.7 78 28.8M78 28.8Q89.5 30.5 91.2 42M91.2 42Q100.3 49.2 96 60M96 60Q100.3 70.8 91.2 78M91.2 78Q89.5 89.5 78 91.2M78 91.2Q70.8 100.3 60 96M60 96Q49.2 100.3 42 91.2M42 91.2Q30.5 89.5 28.8 78M28.8 78Q19.7 70.8 24 60M24 60Q19.7 49.2 28.8 42M28.8 42Q30.5 30.5 42 28.8M42 28.8Q49.2 19.7 60 24"/>
+                        </g>
+                        <circle class="aravo-ring-track" cx="60" cy="60" r="52" pathLength="100"/>
+                        <circle class="aravo-ring-value" cx="60" cy="60" r="52" pathLength="100" stroke-dasharray="{{percent}} 100" transform="rotate(-90 60 60)"/>
+                    </svg>
+                    <div class="aravo-ring-centre" aria-hidden="true">
+                        <span class="aravo-remaining">{{remainingmain}}</span>
+                        {{#remainingrest}}<span class="aravo-remaining-rest">{{.}}</span>{{/remainingrest}}
+                        <span class="aravo-ring-of">{{of}}</span>
                     </div>
-                {{/rows}}
-            </div>
+                </div>
+                <div class="aravo-bag-facts">
+                    <div class="aravo-label">{{#str}} bagtitle, block_oksigeniaaravo {{/str}}{{#bagtip}} {{> core/help_icon }}{{/bagtip}}</div>
+                    {{#statusword}}<span class="aravo-status">{{statusword}}</span>{{/statusword}}
+                    <p class="aravo-line">{{line}}</p>
+                    {{#included}}
+                        <p class="aravo-included"><span class="aravo-tick" aria-hidden="true"></span>{{#str}} includedtitle, block_oksigeniaaravo {{/str}} · <strong>{{.}}</strong></p>
+                    {{/included}}
+                    {{#intervention}}
+                        <p class="aravo-intervention">
+                            <span class="aravo-pips" aria-hidden="true">{{#pips}}<span class="aravo-pip{{#used}} is-used{{/used}}"></span>{{/pips}}</span>
+                            <span>{{label}}: <strong>{{text}}</strong></span>
+                        </p>
+                    {{/intervention}}
+                </div>
+            </section>
+        {{/bag}}
+        {{#usage}}
+            <section class="aravo-usage" aria-label="{{#str}} usagetitle, block_oksigeniaaravo {{/str}}">
+                <div class="aravo-label">{{#str}} usagetitle, block_oksigeniaaravo {{/str}}</div>
+                <div class="aravo-gauges">
+                    {{#rows}}
+                        <figure class="aravo-gauge aravo-is-{{state}}">
+                            <svg viewBox="0 0 120 66" role="img" aria-label="{{label}}: {{text}}" focusable="false">
+                                <path class="aravo-gauge-track" d="M10 60A50 50 0 0 1 110 60" pathLength="100"/>
+                                <path class="aravo-gauge-value" d="M10 60A50 50 0 0 1 110 60" pathLength="100" stroke-dasharray="{{percent}} 100"/>
+                            </svg>
+                            <div class="aravo-gauge-number" aria-hidden="true">{{percenttext}}</div>
+                            <figcaption>
+                                <span class="aravo-gauge-label">{{label}}</span>
+                                <span class="aravo-gauge-text">{{text}}</span>
+                            </figcaption>
+                        </figure>
+                    {{/rows}}
+                </div>
+            </section>
         {{/usage}}
         {{#hasrecent}}
-            <div class="aravo-label text-muted">{{#str}} recenttitle, block_oksigeniaaravo {{/str}}</div>
-            <ul class="aravo-worklist list-unstyled mb-3">
+            <div class="aravo-label">{{#str}} recenttitle, block_oksigeniaaravo {{/str}}</div>
+            <ul class="aravo-worklist list-unstyled">
                 {{#recent}}
                     <li class="aravo-work">
                         <div class="aravo-work-main">{{description}}</div>
-                        <div class="small text-muted">{{date}} · {{minutes}} · <span class="aravo-dot {{typedot}}" aria-hidden="true">●</span> {{type}}</div>
+                        <div class="aravo-work-meta">{{date}} · {{minutes}} · <span class="aravo-type"><span class="aravo-dot {{typedot}}" aria-hidden="true"></span>{{type}}</span></div>
                     </li>
                 {{/recent}}
             </ul>
         {{/hasrecent}}
         <a class="aravo-more" href="{{registerurl}}">{{#str}} fullregister, block_oksigeniaaravo {{/str}} →</a>
-        <div class="small text-muted mt-2">{{#brand}}{{brand}} · {{/brand}}{{updated}}</div>
+        <p class="aravo-sign"><span class="aravo-oks" aria-hidden="true"></span>{{#brand}}<span class="aravo-brand">{{brand}}</span> · {{/brand}}{{updated}}</p>
     </div>
     {{/empty}}
 </div>

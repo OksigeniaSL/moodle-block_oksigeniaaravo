@@ -5,6 +5,13 @@ All notable changes to this plugin are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+- Visual redesign of the card: the bag is a ring (with the emblem's ñandutí lace inside and the balance at the
+  centre), this month's interventions are pips, the plan usage shows as half-moon gauges, and there is a subtitle.
+  States carry a word as well as a colour. All colours come from the theme variables (light, dark and each client's
+  brand), and the layout adapts to the block's own width with container queries. Oksigenia's symbol appears in the
+  foot signature and in the collapsed summary. Inline SVGs, no CDN. The register page keeps its earlier look.
+
 ### Added
 - The card opens on entry, shows a one-time note that only the management sees it, then folds itself to a compact
   one-line summary (bag balance and this month's interventions) that the manager can re-open with a click. Progressive

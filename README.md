@@ -19,10 +19,27 @@ Whoever has the `block/oksigeniaaravo:view` capability, given by default to the 
 sees it and students do not. Add the block to the dashboard. The link to the central registry is shown to site
 administrators only.
 
+The block does not show in the Moodle mobile app: the support hours are read in the browser, also on a phone, where the
+card and the register adapt to the screen.
+
+## In «Your work»
+
+When the site has [«Your work» (Oksigenia Tembiapo)](https://github.com/OksigeniaSL/moodle-block_oksigeniatembiapo#readme),
+the dashboard block where each service of the site has a door, the support hours add theirs (contract version 2), for
+the same people who see the block:
+
+- the door opens the register;
+- its state, in one short line with two figures: what is left in the bank and how many tasks were done this week or, in
+  a week with none yet, this month's interventions;
+- an alert, for today, when the bank is used up or the site reaches a limit of its plan (active users or disk).
+
+It reads only the local copy, never the network, and without «Your work» installed nothing calls it.
+
 ## Requirements
 
 - Moodle 4.1 to 5.3.
 - PHP 7.4 or later.
+- Optional: «Your work» (Oksigenia Tembiapo), for the door (it needs Moodle 4.5 or later).
 - Outbound HTTPS to the central registry.
 
 ## Install

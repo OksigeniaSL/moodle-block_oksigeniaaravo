@@ -65,11 +65,21 @@ $PAGE->set_heading(get_string('registertitle', 'block_oksigeniaaravo'));
 refresher::refresh_if_stale();
 
 echo $OUTPUT->header();
-$snap = snapshot::from_store();
+$meta = store::get();
+$snap = snapshot::from_row($meta);
 if (!$snap) {
-    echo $OUTPUT->notification(get_string('nodatayet', 'block_oksigeniaaravo'), 'info');
+    $empty = presenter::empty_state($meta, is_siteadmin());
+    $message = s($empty['message']);
+    if (!empty($empty['adminhint'])) {
+        $hint = s($empty['adminhint']);
+        if (!empty($empty['adminurl'])) {
+            $hint .= ' ' . html_writer::link($empty['adminurl'], s($empty['adminlink']));
+        }
+        $message .= html_writer::tag('p', $hint, ['class' => 'mb-0 mt-2']);
+    }
+    echo $OUTPUT->notification($message, 'info');
 } else {
-    $data = presenter::page($snap, store::get(), is_siteadmin());
+    $data = presenter::page($snap, $meta, is_siteadmin());
     if (!empty($data['hasentries'])) {
         $data['downloadform'] = $OUTPUT->download_dataformat_selector(
             get_string('download'),

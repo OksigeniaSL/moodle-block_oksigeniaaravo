@@ -19,10 +19,27 @@ Quien tenga la capacidad `block/oksigeniaaravo:view`, concedida por defecto al a
 de gestión lo ve y los alumnos no. El bloque se añade al Área personal. El enlace al registro central se muestra solo a
 los administradores del sitio.
 
+El bloque no sale en la app de Moodle: las horas de soporte se consultan en el navegador, también en el móvil, donde la
+tarjeta y el registro se adaptan a la pantalla.
+
+## En «Tu trabajo»
+
+Si el sitio tiene [«Tu trabajo» (Oksigenia Tembiapo)](https://github.com/OksigeniaSL/moodle-block_oksigeniatembiapo#readme),
+el bloque del Área personal donde cada servicio del sitio tiene su puerta, las horas de soporte ponen la suya (versión 2
+del contrato), para las mismas personas que ven el bloque:
+
+- la puerta lleva al registro;
+- su estado, en una línea corta con dos cifras: lo que queda en la bolsa y cuántos trabajos se han hecho esta semana o,
+  en una semana sin ninguno todavía, las intervenciones del mes;
+- un aviso, para hoy, cuando la bolsa se agota o el sitio llega a un límite de su plan (usuarios activos o disco).
+
+Lee solo la copia local, nunca la red, y sin «Tu trabajo» instalado nadie la llama.
+
 ## Requisitos
 
 - Moodle 4.1 a 5.3.
 - PHP 7.4 o posterior.
+- Opcional: «Tu trabajo» (Oksigenia Tembiapo), para la puerta (pide Moodle 4.5 o posterior).
 - Salida HTTPS hacia el registro central.
 
 ## Instalación

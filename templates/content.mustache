@@ -52,6 +52,9 @@
 <div class="block-oksigeniaaravo"{{^empty}} data-aravo-summary="{{summaryline}}" data-aravo-intro="{{#str}} cardintro, block_oksigeniaaravo {{/str}}"{{/empty}}>
     {{#empty}}
         <p class="text-muted mb-0">{{message}}</p>
+        {{#adminhint}}
+            <p class="small mt-2 mb-0">{{adminhint}}{{#adminurl}} <a href="{{adminurl}}">{{adminlink}}</a>{{/adminurl}}</p>
+        {{/adminhint}}
     {{/empty}}
     {{^empty}}
     {{#subtitle}}
@@ -163,7 +166,7 @@
             </ul>
         {{/hasrecent}}
         <a class="aravo-more" href="{{registerurl}}">{{#str}} fullregister, block_oksigeniaaravo {{/str}} →</a>
-        <p class="aravo-sign"><span class="aravo-oks" aria-hidden="true"></span>{{#brand}}<span class="aravo-brand">{{brand}}</span> · {{/brand}}{{updated}}</p>
+        <p class="aravo-sign"><span class="aravo-oks" aria-hidden="true"></span>{{#brand}}<span class="aravo-brand" translate="no">{{brand}}</span> · {{/brand}}{{updated}}</p>
     </div>
     {{/empty}}
 </div>

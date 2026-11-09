@@ -73,11 +73,11 @@ final class snapshot_test extends \advanced_testcase {
     }
 
     public function test_minutes_turn_into_a_readable_duration(): void {
-        $this->assertEquals('3 h 45 min', minutes::format(225));
-        $this->assertEquals('2 h', minutes::format(120));
-        $this->assertEquals('45 min', minutes::format(45));
-        $this->assertEquals('0 min', minutes::format(0));
-        $this->assertEquals('0 min', minutes::format(-10));
+        $this->assertEquals("3\u{00A0}h\u{00A0}45\u{00A0}min", minutes::format(225));
+        $this->assertEquals("2\u{00A0}h", minutes::format(120));
+        $this->assertEquals("45\u{00A0}min", minutes::format(45));
+        $this->assertEquals("0\u{00A0}min", minutes::format(0));
+        $this->assertEquals("0\u{00A0}min", minutes::format(-10));
     }
 
     public function test_the_snapshot_reads_the_central_data(): void {
@@ -116,9 +116,9 @@ final class snapshot_test extends \advanced_testcase {
         $snap = new snapshot($this->example());
         $context = presenter::card($snap, (object) ['status' => 'ok', 'fetchedat' => time()]);
         $this->assertArrayHasKey('bag', $context);
-        $this->assertEquals('3 h 45 min', $context['bag']['remaining']);
-        $this->assertEquals('3 h', $context['bag']['remainingmain']);
-        $this->assertEquals('45 min', $context['bag']['remainingrest']);
+        $this->assertEquals("3\u{00A0}h\u{00A0}45\u{00A0}min", $context['bag']['remaining']);
+        $this->assertEquals("3\u{00A0}h", $context['bag']['remainingmain']);
+        $this->assertEquals("45\u{00A0}min", $context['bag']['remainingrest']);
         $this->assertEquals('ok', $context['bag']['state']);
         $this->assertEquals(38, $context['bag']['percent']);
         $this->assertFalse($context['bag']['low']);
@@ -128,7 +128,7 @@ final class snapshot_test extends \advanced_testcase {
         $this->assertFalse($context['failed']);
         // The one included entry (30 min) shows as the "at no cost" card.
         $this->assertArrayHasKey('gifts', $context);
-        $this->assertEquals('30 min', $context['gifts']['included']['total']);
+        $this->assertEquals("30\u{00A0}min", $context['gifts']['included']['total']);
     }
 
     public function test_the_gifts_card_separates_included_from_courtesy(): void {
@@ -143,12 +143,12 @@ final class snapshot_test extends \advanced_testcase {
         $context = presenter::card(new snapshot($data), (object) ['status' => 'ok', 'fetchedat' => time()]);
         $this->assertArrayHasKey('gifts', $context);
         // Included = 30 min intervention + 30 min maintenance; the courtesy is not counted here.
-        $this->assertEquals('1 h', $context['gifts']['included']['total']);
+        $this->assertEquals("1\u{00A0}h", $context['gifts']['included']['total']);
         $this->assertTrue($context['gifts']['included']['hasparts']);
         $this->assertCount(2, $context['gifts']['included']['parts']);
         // Courtesy shown apart, with its latest description, and both cards present.
         $this->assertArrayHasKey('courtesy', $context['gifts']);
-        $this->assertEquals('1 h', $context['gifts']['courtesy']['total']);
+        $this->assertEquals("1\u{00A0}h", $context['gifts']['courtesy']['total']);
         $this->assertEquals('A gift hour for the team', $context['gifts']['courtesy']['latest']);
         $this->assertTrue($context['gifts']['two']);
     }
@@ -158,7 +158,7 @@ final class snapshot_test extends \advanced_testcase {
         $context = presenter::card($snap, (object) ['status' => 'ok', 'fetchedat' => time()]);
         $this->assertArrayHasKey('summaryline', $context);
         // It leads with the bag balance and names this month's interventions.
-        $this->assertStringContainsString('3 h 45 min', $context['summaryline']);
+        $this->assertStringContainsString("3\u{00A0}h\u{00A0}45\u{00A0}min", $context['summaryline']);
         $this->assertStringContainsString('·', $context['summaryline']);
     }
 

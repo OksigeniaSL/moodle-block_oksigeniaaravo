@@ -47,10 +47,10 @@ $string['task_refresh'] = 'Read the support hours from the central registry';
 // A month and year, as a date format for userdate (%B is the month name).
 $string['monthyearformat'] = '%B %Y';
 
-// Durations.
-$string['durationhm'] = '{$a->h} h {$a->m} min';
-$string['durationh'] = '{$a->h} h';
-$string['durationm'] = '{$a->m} min';
+// Durations. Between a figure and its unit goes a non-breaking space (U+00A0), so they never split across lines.
+$string['durationhm'] = '{$a->h} h {$a->m} min';
+$string['durationh'] = '{$a->h} h';
+$string['durationm'] = '{$a->m} min';
 
 // Block and register.
 $string['blocktitle'] = 'Support hours';
@@ -65,7 +65,10 @@ $string['includedtitle'] = 'Included at no cost';
 $string['recenttitle'] = 'Latest work';
 $string['fullregister'] = 'Full register';
 $string['updatedat'] = 'Updated on {$a->date} at {$a->time}';
-$string['nodatayet'] = 'There is nothing to show yet.';
+$string['nodatayet'] = 'The support hours of your platform will show here: the bank, this month\'s interventions and every piece of work done. They appear by themselves as soon as the first data arrives from the support registry.';
+$string['nodatayetfailed'] = 'The last read of the central registry did not work ({$a}); it tries again by itself every 15 minutes.';
+$string['nodatayetsettings'] = 'Open the settings';
+$string['nodatayetsetup'] = 'To start, the address of the central registry is missing from the block settings.';
 $string['registertitle'] = 'Support hours';
 $string['summarytitle'] = 'By month';
 $string['worktitle'] = 'Work log';
@@ -76,6 +79,15 @@ $string['summarybag'] = '{$a} in the bank';
 $string['summarymonth'] = '{$a->used} of {$a->allowed} this month';
 $string['summarydefault'] = 'See the support provided';
 $string['cardintro'] = 'Only the platform management sees this: the support time we spend on your services.';
+
+// The door in «Your work» (block_oksigeniatembiapo).
+$string['alertbagempty'] = 'The hours bank is used up';
+$string['alertlimitdisk'] = 'The disk has reached the plan limit: {$a}';
+$string['alertlimitusers'] = 'Active users have reached the plan limit: {$a}';
+$string['doorbaglow'] = 'Low balance: {$a} in the bank';
+$string['doormonth'] = '{$a->used} of {$a->allowed} interventions this month';
+$string['doorweek'] = '{$a} tasks this week';
+$string['doorweekone'] = '1 task this week';
 
 // At no cost: included (the contract) and courtesy (discretionary).
 $string['includednotbag'] = 'Not taken from your bag';
@@ -90,7 +102,7 @@ $string['usagetitle'] = 'Plan usage';
 $string['usageusers'] = 'Active users (30 days)';
 $string['usageusersof'] = '{$a->used} of {$a->limit}';
 $string['usagedisk'] = 'Disk';
-$string['usagediskof'] = '{$a->used} GB of {$a->limit} GB';
+$string['usagediskof'] = '{$a->used} GB of {$a->limit} GB';
 $string['percentformat'] = '{$a}%';
 
 // This month's included interventions.

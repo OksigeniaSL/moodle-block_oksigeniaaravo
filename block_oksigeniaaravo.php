@@ -47,12 +47,13 @@ class block_oksigeniaaravo extends block_base {
     }
 
     /**
-     * It has global settings, not per-instance ones.
+     * It has site-wide settings (settings.php: the central registry address and the rest); Moodle only loads that page
+     * when this says so. Per-instance settings are a different switch (instance_allow_config), and the block has none.
      *
      * @return bool
      */
     public function has_config() {
-        return false;
+        return true;
     }
 
     /**
@@ -72,15 +73,16 @@ class block_oksigeniaaravo extends block_base {
         if (!has_capability('block/oksigeniaaravo:view', context_system::instance())) {
             return $this->content;
         }
-        $snap = snapshot::from_store();
+        $meta = store::get();
+        $snap = snapshot::from_row($meta);
         if (!$snap) {
             $this->content->text = $OUTPUT->render_from_template(
                 'block_oksigeniaaravo/content',
-                ['empty' => true, 'message' => get_string('nodatayet', 'block_oksigeniaaravo')]
+                presenter::empty_state($meta, is_siteadmin())
             );
             return $this->content;
         }
-        $context = presenter::card($snap, store::get());
+        $context = presenter::card($snap, $meta);
         $this->content->text = $OUTPUT->render_from_template('block_oksigeniaaravo/content', $context);
         $this->add_card_behaviour();
         return $this->content;

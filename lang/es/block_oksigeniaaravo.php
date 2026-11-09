@@ -47,10 +47,10 @@ $string['task_refresh'] = 'Leer las horas de soporte del registro central';
 // Un mes y un año, como formato de fecha para userdate (%B es el nombre del mes).
 $string['monthyearformat'] = '%B de %Y';
 
-// Duraciones.
-$string['durationhm'] = '{$a->h} h {$a->m} min';
-$string['durationh'] = '{$a->h} h';
-$string['durationm'] = '{$a->m} min';
+// Duraciones. Entre la cifra y su unidad va un espacio duro (U+00A0), para que nunca se partan en dos líneas.
+$string['durationhm'] = '{$a->h} h {$a->m} min';
+$string['durationh'] = '{$a->h} h';
+$string['durationm'] = '{$a->m} min';
 
 // Bloque y registro.
 $string['blocktitle'] = 'Horas de soporte';
@@ -65,7 +65,10 @@ $string['includedtitle'] = 'Incluido sin coste';
 $string['recenttitle'] = 'Últimos trabajos';
 $string['fullregister'] = 'Registro completo';
 $string['updatedat'] = 'Actualizado el {$a->date} a las {$a->time}';
-$string['nodatayet'] = 'Todavía no hay nada que mostrar.';
+$string['nodatayet'] = 'Aquí saldrán las horas de soporte de tu plataforma: la bolsa, las intervenciones del mes y cada trabajo hecho. Aparecen solas en cuanto llega el primer dato del registro de soporte.';
+$string['nodatayetfailed'] = 'La última lectura del registro central no ha funcionado ({$a}); se vuelve a intentar sola cada 15 minutos.';
+$string['nodatayetsettings'] = 'Abrir los ajustes';
+$string['nodatayetsetup'] = 'Para empezar, falta la dirección del registro central en los ajustes del bloque.';
 $string['registertitle'] = 'Horas de soporte';
 $string['summarytitle'] = 'Por mes';
 $string['worktitle'] = 'Registro de trabajos';
@@ -76,6 +79,15 @@ $string['summarybag'] = '{$a} en la bolsa';
 $string['summarymonth'] = '{$a->used} de {$a->allowed} este mes';
 $string['summarydefault'] = 'Ver el soporte dedicado';
 $string['cardintro'] = 'Esto solo lo ve la gestión de la plataforma: el tiempo de soporte que dedicamos a tus servicios.';
+
+// La puerta en «Tu trabajo» (block_oksigeniatembiapo).
+$string['alertbagempty'] = 'La bolsa de horas está agotada';
+$string['alertlimitdisk'] = 'El disco ha llegado al límite del plan: {$a}';
+$string['alertlimitusers'] = 'Los usuarios activos han llegado al límite del plan: {$a}';
+$string['doorbaglow'] = 'Saldo bajo: {$a} en la bolsa';
+$string['doormonth'] = '{$a->used} de {$a->allowed} intervenciones este mes';
+$string['doorweek'] = '{$a} trabajos esta semana';
+$string['doorweekone'] = '1 trabajo esta semana';
 
 // Sin coste: incluido (el contrato) y cortesía (a criterio de Oksigenia).
 $string['includednotbag'] = 'No descuenta de tu bolsa';
@@ -90,8 +102,8 @@ $string['usagetitle'] = 'Uso del plan';
 $string['usageusers'] = 'Usuarios activos (30 días)';
 $string['usageusersof'] = '{$a->used} de {$a->limit}';
 $string['usagedisk'] = 'Disco';
-$string['usagediskof'] = '{$a->used} GB de {$a->limit} GB';
-$string['percentformat'] = '{$a} %';
+$string['usagediskof'] = '{$a->used} GB de {$a->limit} GB';
+$string['percentformat'] = '{$a} %';
 
 // Las intervenciones incluidas del mes.
 $string['interventionstitle'] = 'Intervenciones incluidas';

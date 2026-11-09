@@ -94,6 +94,99 @@ class presenter {
     }
 
     /**
+     * What the door of the support hours says in «Your work» (block_oksigeniatembiapo): one line of the state with
+     * figures, and the alerts of what needs the management's attention (a used-up bag, a plan limit reached). An alert
+     * is only a real state, never an «all fine».
+     *
+     * @param snapshot $snap The snapshot.
+     * @param \stdClass $meta The local copy's metadata, with the measured plan usage.
+     * @param int $now The time to count this week from; now when 0.
+     * @return array With 'status' (may be empty) and 'alerts' (each with 'text' and 'level').
+     */
+    public static function door(snapshot $snap, \stdClass $meta, int $now = 0): array {
+        $parts = [];
+        $alerts = [];
+        if ($snap->has_bag()) {
+            $bag = self::bag($snap->bag());
+            $key = $bag['state'] === 'low' ? 'doorbaglow' : 'summarybag';
+            $parts[] = get_string($key, 'block_oksigeniaaravo', $bag['remaining']);
+            if ($bag['state'] === 'empty') {
+                $alerts[] = ['text' => get_string('alertbagempty', 'block_oksigeniaaravo'), 'level' => 'today'];
+            }
+        }
+        $week = self::week_count($snap, $now > 0 ? $now : time());
+        if ($week > 0) {
+            $parts[] = $week === 1 ? get_string('doorweekone', 'block_oksigeniaaravo')
+                : get_string('doorweek', 'block_oksigeniaaravo', $week);
+        }
+        $in = $snap->interventions();
+        if ((int) $in['allowed'] > 0) {
+            $a = ['used' => (int) $in['used'], 'allowed' => (int) $in['allowed']];
+            $parts[] = get_string('doormonth', 'block_oksigeniaaravo', $a);
+        }
+        // Two figures at most, like every door, so the line fits a narrow door and a phone: the bag first, then this
+        // week's work (a sign that the service is alive) and, failing either, this month's interventions.
+        $parts = array_slice($parts, 0, 2);
+        $usage = self::usage($snap->limits(), $meta);
+        foreach (($usage['rows'] ?? []) as $row) {
+            if ($row['state'] === 'full') {
+                $alerts[] = ['text' => get_string('alertlimit' . $row['kind'], 'block_oksigeniaaravo', $row['text']),
+                    'level' => 'today'];
+            }
+        }
+        return ['status' => implode(' · ', $parts), 'alerts' => $alerts];
+    }
+
+    /**
+     * How many works the register holds for this week so far, from the first day of the week of the person's calendar
+     * to today, in their time zone: a sign that the service is alive, added up and without names.
+     *
+     * @param snapshot $snap The snapshot.
+     * @param int $now The current time.
+     * @return int
+     */
+    private static function week_count(snapshot $snap, int $now): int {
+        $today = new \DateTime('@' . $now);
+        $today->setTimezone(\core_date::get_user_timezone_object());
+        $first = (int) \core_calendar\type_factory::get_calendar_instance()->get_starting_weekday();
+        $back = ((int) $today->format('w') - $first + 7) % 7;
+        $to = $today->format('Y-m-d');
+        $from = $today->modify('-' . $back . ' days')->format('Y-m-d');
+        $count = 0;
+        foreach ($snap->entries() as $entry) {
+            $day = substr($entry['date'], 0, 10);
+            if ($day >= $from && $day <= $to) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * What the block and the register say before the first data arrives: what will show there and when and, for a site
+     * administrator, what is missing (the central address) or why the last read did not work.
+     *
+     * @param \stdClass|null $meta The local copy's metadata, or null when nothing was ever read.
+     * @param bool $isadmin Whether the person is a site administrator.
+     * @return array The template context of the empty card.
+     */
+    public static function empty_state(?\stdClass $meta, bool $isadmin): array {
+        $state = ['empty' => true, 'message' => get_string('nodatayet', 'block_oksigeniaaravo')];
+        if (!$isadmin) {
+            return $state;
+        }
+        if (trim((string) get_config('block_oksigeniaaravo', 'centralendpoint')) === '') {
+            $state['adminhint'] = get_string('nodatayetsetup', 'block_oksigeniaaravo');
+            $settings = new \moodle_url('/admin/settings.php', ['section' => 'blocksettingoksigeniaaravo']);
+            $state['adminurl'] = $settings->out(false);
+            $state['adminlink'] = get_string('nodatayetsettings', 'block_oksigeniaaravo');
+        } else if ($meta && (string) ($meta->status ?? '') !== '' && (string) $meta->status !== 'ok') {
+            $state['adminhint'] = get_string('nodatayetfailed', 'block_oksigeniaaravo', (string) $meta->status);
+        }
+        return $state;
+    }
+
+    /**
      * The template context for the register page: the bag, this month's intervention, the per-month summary and the
      * full list of works. The download selector is added by the page, which has the output renderer.
      *
@@ -331,7 +424,7 @@ class presenter {
                 get_string('usageusersof', 'block_oksigeniaaravo', ['used' => $used, 'limit' => $limits['active_users']]),
                 $used,
                 $limits['active_users']
-            );
+            ) + ['kind' => 'users'];
         }
         if ($limits['disk_gb'] > 0) {
             $usedgb = (int) ($meta->diskmb ?? 0) / 1024;
@@ -343,7 +436,7 @@ class presenter {
                 ]),
                 $usedgb,
                 $limits['disk_gb']
-            );
+            ) + ['kind' => 'disk'];
         }
         return $rows ? ['rows' => $rows] : null;
     }

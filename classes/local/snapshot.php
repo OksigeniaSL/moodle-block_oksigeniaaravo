@@ -43,7 +43,16 @@ class snapshot {
      * @return self|null
      */
     public static function from_store(): ?self {
-        $row = store::get();
+        return self::from_row(store::get());
+    }
+
+    /**
+     * The snapshot held in a row of the local copy already read, or null if it holds none.
+     *
+     * @param \stdClass|null $row The cache row, as store::get() gives it.
+     * @return self|null
+     */
+    public static function from_row(?\stdClass $row): ?self {
         if (!$row || empty($row->payload)) {
             return null;
         }

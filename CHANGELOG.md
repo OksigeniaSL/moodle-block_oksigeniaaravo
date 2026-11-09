@@ -5,6 +5,31 @@ All notable changes to this plugin are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-09
+
+### Added
+- A door in «Your work» (`block_oksigeniatembiapo`, contract version 2) through
+  `block_oksigeniaaravo_oksigenia_work()` in `lib.php`: for whoever may see the block, it opens the register and says in
+  one short line, with two figures, what is left in the bank (or that the balance is low) and how many tasks were done
+  this week, counted from the first day of the week of the person's calendar, or, in a week with none yet, this month's
+  interventions. It gives an alert for today when the bank is used up or the site reaches a limit of its plan. It reads
+  only the local copy.
+- Before the first data arrives, the block and the register say what will show there and when; a site administrator
+  also sees what is missing (the central address, with a link to the settings) or why the last read did not work.
+
+### Fixed
+- The block's settings page now shows in the site administration (*Plugins → Blocks → Support hours*). The block said it
+  had no site settings (`has_config()` was false), so Moodle never loaded `settings.php`, and the central address could
+  only be set from the command line.
+
+### Changed
+- A figure and its unit never split across lines: non-breaking spaces in the durations, the disk and the percentage.
+- The provider's name is marked `translate="no"`, so the browser's translator leaves it as it is.
+- The README says that the block does not show in the Moodle mobile app and that the support hours are read in the
+  browser.
+
+## [0.7.1] and earlier - 2026-10-26
+
 ### Fixed
 - A half-moon gauge at 0% no longer shows a stray second dot at the far end of the arc (the round-capped
   `stroke-dasharray` pattern repeated); the gap is now longer than the path so only the start dot shows.

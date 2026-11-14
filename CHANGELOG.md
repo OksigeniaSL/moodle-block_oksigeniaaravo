@@ -5,6 +5,15 @@ All notable changes to this plugin are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-11-14
+
+### Changed
+- In the card, each of the latest tasks shows in two lines at most; the register keeps the whole text.
+
+### Fixed
+- The download's file name keeps the leading zero of the day: from the 1st to the 9th of each month it was
+  `aravo-2026112` (Moodle's `userdate()` drops that zero by default) and is now `aravo-20261102`.
+
 ## [0.8.0] - 2026-11-09
 
 ### Added

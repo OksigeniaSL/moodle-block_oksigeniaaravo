@@ -276,6 +276,19 @@ class presenter {
     }
 
     /**
+     * The file name for the download, with the date as a sortable yyyymmdd.
+     *
+     * The day keeps its leading zero: userdate() drops it by default ($fixday), which made «aravo-2026112»
+     * from the 1st to the 9th of each month.
+     *
+     * @param int $time The moment of the download.
+     * @return string
+     */
+    public static function export_filename(int $time): string {
+        return 'aravo-' . userdate($time, '%Y%m%d', 99, false);
+    }
+
+    /**
      * The column headings for the download, in the site language.
      *
      * @return array

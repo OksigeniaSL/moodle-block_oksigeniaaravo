@@ -41,7 +41,7 @@ if ($dataformat !== '') {
     $columns = presenter::export_columns();
     $keys = array_keys($columns);
     \core\dataformat::download_data(
-        'aravo-' . userdate(time(), '%Y%m%d'),
+        presenter::export_filename(time()),
         $dataformat,
         $columns,
         new ArrayIterator($rows),

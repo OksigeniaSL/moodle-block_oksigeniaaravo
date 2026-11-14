@@ -202,6 +202,12 @@ final class snapshot_test extends \advanced_testcase {
         $this->assertArrayNotHasKey('notice', $empty);
     }
 
+    public function test_the_download_name_keeps_the_leading_zero_of_the_day(): void {
+        // Midday UTC on 2 November 2026 is the 2nd in any timezone from UTC-11 to UTC+11.
+        $this->assertEquals('aravo-20261102', presenter::export_filename(gmmktime(12, 0, 0, 11, 2, 2026)));
+        $this->assertEquals('aravo-20261125', presenter::export_filename(gmmktime(12, 0, 0, 11, 25, 2026)));
+    }
+
     public function test_a_failed_read_is_flagged_when_there_is_a_previous_copy(): void {
         $snap = new snapshot($this->example());
         $context = presenter::card($snap, (object) ['status' => 'http500', 'fetchedat' => time()]);

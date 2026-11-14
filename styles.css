@@ -360,9 +360,15 @@
     border-bottom: 0;
 }
 
+/* Two lines at most in the card; the register shows the whole text. */
 .block-oksigeniaaravo .aravo-work-main {
     font-weight: 600;
     line-height: 1.35;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: break-word;
 }
 
 .block-oksigeniaaravo .aravo-work-meta {
